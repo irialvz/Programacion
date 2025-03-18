@@ -1,0 +1,29 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package ejercicios.UNIDAD7.hoja7.ejer2;
+
+import ejercicios.UNIDAD7.hoja7.ejer2.excepciones.animalExcepcion;
+
+/**
+ *
+ * @author Alumno
+ */
+public class Caballo extends Animal {
+
+    public Caballo(String nombre, String raza) throws animalExcepcion {
+        super(nombre, raza);
+    }
+
+    @Override
+    public String cuidadoDiario() {
+        return "necesita diariamente dormir,hidratarse,alimentarse,jugar,hacer pis y pos...";
+    }
+
+    @Override
+    public String toString() {
+        return "Caballo=" + nombre + " de raza " + raza + cuidadoDiario() + '}';
+    }
+
+}
