@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ejercicios.UNIDAD4;
 
 import java.util.Scanner;
 
@@ -45,7 +44,7 @@ public class ejercicio2x11 {
         String palabra = leerFrase();
         String invertida = invertirPalabra(palabra);
         System.out.println("Palabra invertida: " + invertida);
-        
+
         boolean palindrona = esPalindrona(palabra,invertida);
         if (palindrona){
             System.out.println("La palabra " + palabra + " es palindrona");

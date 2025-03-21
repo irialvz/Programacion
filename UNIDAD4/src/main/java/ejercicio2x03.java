@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ejercicios.UNIDAD4;
 
 import java.util.Scanner;
 
@@ -34,7 +33,7 @@ public class ejercicio2x03 {
         int contadorVocales = 0, contadorConsonantes = 0;
         String vocales = "", consonantes = "";
         String cadena = leerFrase();
-        
+
         for (int i = 0; i < cadena.length(); i++) {
             char caracter = cadena.charAt(i);
 

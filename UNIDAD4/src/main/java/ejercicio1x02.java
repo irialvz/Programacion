@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ejercicios.UNIDAD4;
 
 import java.util.Scanner;
 
@@ -28,7 +27,7 @@ public class ejercicio1x02 {
         Scanner teclado = new Scanner(System.in);
         System.out.print("caracter? ");
         char caracter = teclado.next().charAt(0);
-        
+
         if(esLetraMayuscula(caracter)){
             System.out.printf("El caracter %s es una letra mayuscula",caracter);
         } else if (esLetraMinuscula(caracter)){
@@ -36,7 +35,7 @@ public class ejercicio1x02 {
         } else {
             System.out.printf("El caracter %s no es una letra",caracter);
         }
-        
-        
+
+
     }
 }

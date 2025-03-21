@@ -11,6 +11,15 @@ public class Departamento {
 		this.ubicacion = ubicacion;
 	}
 
+	@Override
+	public String toString() {
+		return 
+			"Departamento [Código = " + this.codigo + 
+			", Nombre = " + this.nombre + 
+			", Ubicación = " + this.ubicacion + 
+			"]";
+	}
+
 	public int getCodigo() {
 		return codigo;
 	}
@@ -34,18 +43,6 @@ public class Departamento {
 	public void setUbicacion(String ubicacion) {
 		this.ubicacion = ubicacion;
 	}
-	
-	
-	@Override
-	public String toString() {
-		return 
-			"Departamento [CÃ³digo = " + this.codigo + 
-			", Nombre = " + this.nombre + 
-			", UbicaciÃ³n = " + this.ubicacion + 
-			"]";
-	}
-
-	
 	
 	
 	

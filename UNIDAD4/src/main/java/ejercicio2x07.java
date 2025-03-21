@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ejercicios.UNIDAD4;
 
 import java.util.Scanner;
 
@@ -28,7 +27,7 @@ public class ejercicio2x07 {
         } while (cadena.length() > limite);
         return cadena;
     }
-    
+
     public static void main(String [] args){
         String cadena = leerFrase();
         System.out.println("ROTACIONES HACIA LA DERECHA");
@@ -37,7 +36,7 @@ public class ejercicio2x07 {
             System.out.println(rotacionDerecha);
             // legth-1 obtiene el utlimo caracter y charAt devuelve el caracter de ese indice
             rotacionDerecha = rotacionDerecha.charAt(rotacionDerecha.length() - 1) + rotacionDerecha.substring(0, rotacionDerecha.length() -1);
-                            
+
         }
         System.out.println("ROTACIONES A LA IZQUIERDA");
         String rotacionIzquierda = cadena;

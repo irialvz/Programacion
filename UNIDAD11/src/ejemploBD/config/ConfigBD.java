@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-//import org.sqlite.SQLiteConfig;
+import org.sqlite.SQLiteConfig;
+
+import ejemploBD.excepciones.BDException;
 
 public class ConfigBD {
 
@@ -13,28 +15,27 @@ public class ConfigBD {
 	
 	
 	/**
-	 * 
+	 * Abre conexión con la base de datos sqllite
 	 * @return
+	 * @throws BDException
 	 */
-	public static Connection abrirConexion() {
+	public static Connection abrirConexion() throws BDException {
 		Connection conexion = null;
 
 		try {
 			// Carga el driver
 			Class.forName(DRIVER);
-//			SQLiteConfig config = new SQLiteConfig();  
+			SQLiteConfig config = new SQLiteConfig();  
 	        config.enforceForeignKeys(true);
-			// Abre conexiï¿½n
+			// Abre conexión
 			conexion = DriverManager.getConnection(URLBD,config.toProperties());			 
 		
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Error al cargar driver" + e.getMessage());
-			e.printStackTrace();
+			throw new BDException(BDException.ERROR_CARGAR_DRIVER + e.getMessage());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Error al obtener la conexiï¿½n a la bd" + e.getMessage());
-			e.printStackTrace();
+			throw new BDException(BDException.ERROR_ABRIR_CONEXION + e.getMessage());
 		}
 
 		return conexion;
@@ -42,16 +43,15 @@ public class ConfigBD {
 	}
 	
 	/**
-	 * 
+	 * Cierra conexión con SQLLite
 	 * @param conexion
+	 * @throws BDException 
 	 */
-	public static void cerrarConexion(Connection conexion) {
-		// TODO Auto-generated method stub
+	public static void cerrarConexion(Connection conexion) throws BDException {
 		try {
 			conexion.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new BDException(BDException.ERROR_CERRAR_CONEXION + e.getMessage() );
 		}
 	}
 

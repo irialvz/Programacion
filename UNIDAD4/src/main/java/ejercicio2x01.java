@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ejercicios.UNIDAD4;
 
 import java.util.Scanner;
 
@@ -49,7 +48,7 @@ public class ejercicio2x01 {
         System.out.print("La frase tiene " + contadorMayusculas + " letras mayusculas.");
         System.out.println();
         System.out.println("Letras mayusculas: " + letrasMayusculas);
-        
+
         System.out.print("La frase tiene " + contadorMinusculas + " letras minusculas.");
         System.out.println();
         System.out.print("Letras minusculas: " + letrasMinusculas);

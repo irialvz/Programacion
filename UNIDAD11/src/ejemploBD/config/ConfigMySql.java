@@ -4,55 +4,56 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-//import org.sqlite.SQLiteConfig;
+import org.sqlite.SQLiteConfig;
+
+import ejemploBD.excepciones.BDException;
 
 public class ConfigMySql {
 
 	private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-	private static final String URLBD = "jdbc:mysql://localhost:3306/empresa";//modificado
-	
-	private static final String usuario = "root";//modificado
-	private static final String contraseÃ±a = "";	//modificado	
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public static Connection abrirConexion() {
-		Connection conexion = null;
+	private static final String URLBD = "jdbc:mysql://localhost:3306/empresa";
 
+	private static final String usuario = "root";
+	private static final String contraseña = "";
+
+	/**
+	 * Abre conexión con la base de datos mysql
+	 * @return
+	 * @throws BDException
+	 */
+	public static Connection abrirConexion() throws BDException {
+		Connection conexion = null;
+		
 		try {
 			// Carga el driver
 			Class.forName(DRIVER);
-			// Abre conexiï¿½n
-			conexion = DriverManager.getConnection(URLBD,usuario,contraseÃ±a);			 
-		
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Error al cargar driver" + e.getMessage());
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Error al obtener la conexiï¿½n a la bd" + e.getMessage());
-			e.printStackTrace();
-		}
+			// Abre conexión
+			conexion = DriverManager.getConnection(URLBD, usuario, contraseña);
+		} 
+		catch (ClassNotFoundException e) {			
+			throw new BDException(BDException.ERROR_CARGAR_DRIVER + e.getMessage());
+		} catch (SQLException e) {			
+			throw new BDException(BDException.ERROR_ABRIR_CONEXION + e.getMessage());
+		}		
 
 		return conexion;
 
 	}
-	
+
 	/**
-	 * 
+	 * Cierra conexión con la base de datos
 	 * @param conexion
+	 * @throws BDException
 	 */
-	public static void cerrarConexion(Connection conexion) {
-		// TODO Auto-generated method stub
+	public static void cerrarConexion(Connection conexion) throws BDException {
+				
 		try {
 			conexion.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new BDException(BDException.ERROR_CERRAR_CONEXION + e.getMessage() );
 		}
+		
+		
 	}
 
 }

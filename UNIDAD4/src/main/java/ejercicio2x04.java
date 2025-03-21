@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ejercicios.UNIDAD4;
 
 import java.util.Scanner;
 
@@ -34,7 +33,7 @@ public class ejercicio2x04 {
             if (i % 2 == 0) {
                 System.out.print(cadena.charAt(i));
             }
-             
+
         }
     }
         public static void posicionImpar(String cadena) {
@@ -42,7 +41,7 @@ public class ejercicio2x04 {
             if (i % 2 != 0) {
                 System.out.print(cadena.charAt(i));
             }
-             
+
         }
     }
     public static void main(String[] args){

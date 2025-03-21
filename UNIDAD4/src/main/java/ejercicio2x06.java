@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ejercicios.UNIDAD4;
 
 import java.util.Scanner;
 
@@ -18,17 +17,17 @@ public class ejercicio2x06 {
         do {
             System.out.print("Frase? ");
             cadena = teclado.nextLine();
-            
+
             if (cadena.length() < MINIMO || cadena.length() > LIMITE){
                 System.out.println("La cadena debe tener minimo 5 caracteres y maximo 40 caracteres");
             }
         } while (cadena.length() < MINIMO || cadena.length() > LIMITE);
         return cadena;
     }
-    
+
     public static void main(String[] args){
         String cadena = leerFrase(), acumulado = "";
-        
+
         for (int i = 0; i < cadena.length();i++){
             acumulado += cadena.charAt(i);
             System.out.println(acumulado);

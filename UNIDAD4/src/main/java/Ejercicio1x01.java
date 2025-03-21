@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ejercicios.UNIDAD4;
+
 
 import java.util.Scanner;
 
@@ -20,7 +20,7 @@ public class Ejercicio1x01 {
         Scanner teclado = new Scanner(System.in);
         System.out.print("Introduce un caracter ");
         char caracter = teclado.next().charAt(0);
-        
+
         if(esNumeroArabico(caracter)){
             System.out.printf("El caracter %s es arabico ",caracter);
         } else {

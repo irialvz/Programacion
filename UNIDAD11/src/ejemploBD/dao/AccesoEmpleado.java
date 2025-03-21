@@ -24,9 +24,10 @@ public class AccesoDepartamento {
 	 * @return
 	 * @throws BDException
 	 */
-	public static List<Departamento> consultarDepartamentos(String ubicacion) throws BDException{
+	//CONSULTA TODOS LOS EMPLEADOS QUE GANAN MAS QUE UN SALARIO ESPECIFICADO
+	public static List<Empleado> consultarEmpleados(double salario) throws BDException{
 
-		List<Departamento> listaDepartamentos = new ArrayList<Departamento>();
+		List<Empleado> listaEmpleados = new ArrayList<Empleado>();
 		PreparedStatement ps = null;
 		Connection conexion = null;
 
@@ -34,17 +35,25 @@ public class AccesoDepartamento {
 			// Conexi�n a la bd
 			conexion = ConfigBD.abrirConexion();
 
-			String query = "SELECT * FROM departamento WHERE ubicacion = ? ORDER BY nombre";
+			String query = "SELECT * FROM empleados WHERE salario > ? ORDER BY nombre";
 
 			ps = conexion.prepareStatement(query);
 			// Al primer interrogante
-			ps.setString(1, ubicacion);
+			ps.setDouble(1, salario);
+			
 
 			ResultSet resultados = ps.executeQuery();
 			while (resultados.next()) {
-				Departamento departamento = new Departamento(resultados.getInt("codigo"),
-						resultados.getString("nombre"), resultados.getString("ubicacion"));
-				listaDepartamentos.add(departamento);
+				int codigo = resultados.getInt("codigo");
+				String nombreString = resultados.getString("nombre");
+				String fechaString = resultados.getString("fecha_alta");
+				Double salarioDouble = resultados.getString("salario");
+				int codigoDepartamento = resultados.getInt("codigo_departamento");
+				
+				Departamento d = new Departamento(codigoDepartamento);
+				Empleado e = new Empleado(codigo,nombreString,fechaString,salarioDouble,d);
+				
+				listaEmpleados.add(e);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -65,7 +74,7 @@ public class AccesoDepartamento {
 	 * @return
 	 * @throws BDException
 	 */
-	public static List<Departamento> consultarDepartamentos2(String ubicacion) throws BDException  {
+	public static List<Empleado> consultarEmpleadosDepartamento(String ubicacion) throws BDException  {
 
 		List<Departamento> listaDepartamentos = new ArrayList<Departamento>();
 		PreparedStatement ps = null;
@@ -74,16 +83,26 @@ public class AccesoDepartamento {
 		try {
 			// Conexi�n a la bd			
 			conexion = ConfigMySql.abrirConexion();
-			String query = "SELECT * FROM departamento WHERE ubicacion = " + ubicacion + "' order by nombre";
-			
-			Statement sentencia = conexion.createStatement();			
-			ResultSet resultados = sentencia.executeQuery(query);
+			String query = "SELECT * FROM empleados,departamento WHERE empleados.codigo_departamento = departamento.codigo AND salario > ? order by empleados.nombre;";
+			ps = conexion.prepareStatement(query);
+			// Al primer interrogante
+			ps.setDouble(1, salario);		
+			ResultSet resultados = sentencia.executeQuery();
 			
 			while (resultados.next()) {
-				Departamento departamento = new Departamento(resultados.getInt("codigo"),
-						resultados.getString("nombre"), resultados.getString("ubicacion"));
-				listaDepartamentos.add(departamento);
-			}			
+				int codigo = resultados.getInt("codigo_empleado");
+				String nombreString = resultados.getString("nombre_empleado");
+				String fechaString = resultados.getString("fecha_alta");
+				Double salarioDouble = resultados.getString("salario");
+				int codigoDepartamento = resultados.getInt("codigo_departamento");
+				String nombreDepartamentoString = resultados.getString("nombre_departamento");
+				String ubicacion = resultados.getString("ubicacion");
+				
+				Departamento d = new Departamento(codigoDepartamento,nombreDepartamentoString,ubicacion);
+				Empleado e = new Empleado(codigo,nombreString,fechaString,salarioDouble,d);
+				
+				listaEmpleados.add(e);
+			}		
 		} 
 		catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -162,6 +181,12 @@ public class AccesoDepartamento {
 		
 	}
 	//CONSULTAR DEPARTAMENTOS ORDENADO POR NOMBRE
+	public static List<Departamento> consultarDepartamentos2(String ubicacion) {// modificado
+
+		List<Departamento> listaDepartamentos = new ArrayList<Departamento>();
+		PreparedStatement ps = null;
+		Connection conexion = null;
+	}
 
 	// UPDATE departamento SET ubicacion = "ubicacion" where codigo="codigo"
 	
