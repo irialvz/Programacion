@@ -83,7 +83,8 @@ public class AccesoDepartamento {
 		try {
 			// Conexi�n a la bd			
 			conexion = ConfigMySql.abrirConexion();
-			String query = "SELECT * FROM empleados,departamento WHERE empleados.codigo_departamento = departamento.codigo AND salario > ? order by empleados.nombre;";
+			String query = "SELECT * FROM empleados,departamento WHERE empleados.codigo_departamento = "
+					+ "departamento.codigo AND salario > ? order by empleados.nombre;";
 			ps = conexion.prepareStatement(query);
 			// Al primer interrogante
 			ps.setDouble(1, salario);		
@@ -141,8 +142,8 @@ public class AccesoDepartamento {
 	}
 
 	// MODIFICAR LA UBICACION DE UN DEPARTAMENTO
-	public static boolean modificarUbicacionDepartamento(int codDepartamento, String ubicacion) {
-		Departamento departamento = null;
+	public static boolean modificarDepartamentoEmpleado(int codEmpleado, int codDepartamento) {
+		Empleado empleado = null;
 		Connection conexion = null;
 		int resultados = 0;
 		try {
