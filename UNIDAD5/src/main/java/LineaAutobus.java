@@ -1,4 +1,3 @@
-package ejercicios.UNIDAD5;
 
 import java.util.Arrays;
 
