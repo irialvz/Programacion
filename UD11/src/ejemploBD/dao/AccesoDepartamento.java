@@ -97,19 +97,125 @@ public class AccesoDepartamento {
 	}
 	
 	// Consultar el departamento por c�digo
+	public static Departamento consultarDepartamento(int codigoDepartamento) throws BDException{
+
+		Departamento departamento =null;
+		PreparedStatement ps = null;
+		Connection conexion = null;
+
+		try {
+			// Conexi�n a la bd			
+			conexion = ConfigMySql.abrirConexion();
+			String query = "SELECT * FROM departamento WHERE codigo = ? " ;
+			
+			ps = conexion.prepareStatement(query);			
+			ps.setInt(1, codigoDepartamento);
+			
+			ResultSet resultados = ps.executeQuery();
+			
+			if (resultados.next()) {
+				departamento = new Departamento (resultados.getInt("codigo"),
+						resultados.getString("nombre"),resultados.getString("ubicacion"));
+			}
+		} 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+		}		
+		finally {
+			if (conexion!=null) {
+				ConfigMySql.cerrarConexion(conexion);
+			}
+		}
+		return departamento;
+	}
 	
 	
 	// Modificar la ubicaci�n de un departamento
-	// UPDATE departamento SET ubicacion = "ubicacion" where codigo="codigo"
-	
-	
-	
+	public static boolean modificarDepartamento (String ubicacion,int codDepartamento) throws BDException {
+		PreparedStatement ps = null;
+		Connection conexion = null;
+		int resultados = 0;
+		try {
+			// Conexi�n a la bd			
+			conexion = ConfigMySql.abrirConexion();
+			String query = "UPDATE departamento SET ubicacion = ? WHERE codigo = ?" ;
+			
+			ps = (PreparedStatement) conexion.createStatement();			
+			ps.setString(1, ubicacion);
+			ps.setInt(2, codDepartamento);
+			
+			resultados = ps.executeUpdate(query);
+			
+		} 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+		}		
+		finally {
+			if (conexion!=null) {
+				ConfigMySql.cerrarConexion(conexion);
+			}
+		}
+		return resultados > 0;
+		
+	}	
 	// Borrar un departamento por c�digo
-	
-	
-	
-	
-	
+	public static boolean eliminarDepartamento (int codigo) throws BDException {
+		PreparedStatement ps = null;
+		Connection conexion = null;
+		int resultados = 0;
+		try {
+			// Conexi�n a la bd			
+			conexion = ConfigMySql.abrirConexion();
+			String query = "DELETE departamento WHERE codigo = ?" ;
+			
+			ps = (PreparedStatement) conexion.createStatement();			
+			ps.setInt(1, codigo);
+			
+			resultados = ps.executeUpdate(query);
+			
+		} 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+		}		
+		finally {
+			if (conexion!=null) {
+				ConfigMySql.cerrarConexion(conexion);
+			}
+		}
+		return resultados > 0;
+	}
+	public static List<Departamento> agregarDepartamento(String nombre,String ubicacion) throws BDException {
+		List<Departamento> listaDepartamentos = new ArrayList<>();
+		PreparedStatement ps = null;
+		Connection conexion = null;
+		try {
+			// Conexi�n a la bd			
+			conexion = ConfigMySql.abrirConexion();
+			String query = "INSERT INTO departamento (nombre,ubicacion) VALUES = (?,?)" ;
+			
+			ps = (PreparedStatement) conexion.createStatement();			
+			ps.setString(1, nombre);
+			ps.setString(2, ubicacion);
+			
+			ResultSet resultados = ps.executeQuery(query);
+			
+			
+		} 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+		}		
+		finally {
+			if (conexion!=null) {
+				ConfigMySql.cerrarConexion(conexion);
+			}
+		}
+		return listaDepartamentos;
+		
+	}
 	// Consultar todos los departamentos ordenados por nombre
 	
 	

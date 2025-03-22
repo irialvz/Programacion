@@ -22,7 +22,7 @@ public class AccesoEmpleado {
 	 * @return
 	 * @throws BDException
 	 */
-	public static List<Empleado> consultarEmpleados(float salario) throws BDException {
+	public static List<Empleado> consultarEmpleadosSalario(float salario) throws BDException {
 
 		List<Empleado> listaEmpleados = new ArrayList<Empleado>();
 		PreparedStatement ps = null;
@@ -63,5 +63,44 @@ public class AccesoEmpleado {
 		}
 		return listaEmpleados;
 	}
+	public static Empleado consultarEmpleadoCodigo (int codigoEmp) throws BDException {
+		Empleado empleado = null;
+		PreparedStatement ps = null;
+		Connection conexion = null;
 
+		try {
+			// Conexi�n a la bd
+			conexion = ConfigMySql.abrirConexion();
+			String query = "SELECT * FROM empleado WHERE codigo = ? ";
+
+			ps = conexion.prepareStatement(query);
+			// Al primer interrogante le asigno salario (ps1)
+			ps.setInt(1, codigoEmp);
+
+			ResultSet resultados = ps.executeQuery();
+			
+			if (resultados.next()) {
+                String nombre = resultados.getString("nombre");
+                String fecha_alta = resultados.getString("fecha_alta");
+                float salario = resultados.getFloat("salario");
+                Departamento departamento = AccesoDepartamento.consultarDepartamento
+                		(resultados.getInt("codigo_departamento"));
+
+                empleado = new Empleado(codigoEmp, nombre, fecha_alta, salario, departamento);
+            }
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+		} finally {
+			if (conexion != null) {
+				ConfigMySql.cerrarConexion(conexion);
+			}
+		}
+		return empleado;
+	}
+	//public static List<Empleado> consultarEmpleadosDepartamento (){}
+		
+
+	
 }

@@ -11,10 +11,12 @@ public class Principal {
 
 	public static void escribirMenuOpciones() {
 		System.out.println("0) Salir del programa.");
-		System.out.println("1) Consultar el departamento por código");
-		System.out.println("2) Modificar la ubicación de un departamento");
+		System.out.println("1) Consultar el departamento por ubicacion");
+		System.out.println("2) Consultar empleado por salario");
 		System.out.println("3) Borrar un departamento por código");
-		System.out.println("4) Consultar todos los departamentos ordenados por nombre");
+		System.out.println("4) Modificar ubicacion de un departamento");
+		System.out.println("5) Consultar departamento por codigo");
+		System.out.println("6) Agregar departamento");
 
 	}
 
@@ -60,7 +62,7 @@ public class Principal {
 
 					float salario = (float) Teclado.leerReal("Salario? ");
 					List<Empleado> empleados;
-					empleados = AccesoEmpleado.consultarEmpleados(salario);
+					empleados = AccesoEmpleado.consultarEmpleadosSalario(salario);
 
 					if (empleados.size() == 0) {
 						System.out.println(
@@ -73,12 +75,21 @@ public class Principal {
 								"Se han consultado " + empleados.size() + " empleado de la base de datos.");
 					}
 					break;
-					//Borrar un departamento por código
 				case 3:
 					break;
+					//Borrar un departamento por código
+
 					//Consultar todos los departamentos ordenados por nombre
 				case 4:
+					//"4) Modificar ubicacion de un departamento
 					break;
+				case 5:
+					//5) Consultar departamento por codigo
+					break;
+				case 6:
+					//agregar departamento
+					break;
+					
 				}
 			} catch (BDException e) {
 				System.out.println(e.getMessage());
