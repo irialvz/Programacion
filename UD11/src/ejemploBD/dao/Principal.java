@@ -17,6 +17,10 @@ public class Principal {
 		System.out.println("4) Modificar ubicacion de un departamento");
 		System.out.println("5) Consultar departamento por codigo");
 		System.out.println("6) Agregar departamento");
+		System.out.println("7) Cambiar departamento a un empleado");
+		System.out.println("8) Consultar informaticos en la empresa");
+		System.out.println("9) Consultar todos los departamentos ordenados por nombre");
+
 
 	}
 
@@ -56,8 +60,7 @@ public class Principal {
 					}
 					break;
 
-					
-					//Modificar la ubicación de un departamento
+				// Modificar la ubicación de un departamento
 				case 2:
 
 					float salario = (float) Teclado.leerReal("Salario? ");
@@ -65,32 +68,81 @@ public class Principal {
 					empleados = AccesoEmpleado.consultarEmpleadosSalario(salario);
 
 					if (empleados.size() == 0) {
-						System.out.println(
-								"No se ha encontrado ningún empleado con esa ubicación en la base de datos.");
+						System.out
+								.println("No se ha encontrado ningún empleado con esa ubicación en la base de datos.");
 					} else {
 						for (Empleado empleado : empleados) {
 							System.out.println(empleado.toString());
 						}
-						System.out.println(
-								"Se han consultado " + empleados.size() + " empleado de la base de datos.");
+						System.out.println("Se han consultado " + empleados.size() + " empleado de la base de datos.");
 					}
 					break;
 				case 3:
-					break;
-					//Borrar un departamento por código
+					int codigo = Teclado.leerEntero("Codigo? ");
+					boolean departamento;
+					departamento = AccesoDepartamento.eliminarDepartamento(codigo);
 
-					//Consultar todos los departamentos ordenados por nombre
+					if (departamento) {
+						System.out.println("Se ha eliminado correctamento");
+					} else {
+						System.out.println("No se ha encontrado el departamento");
+					}
+
+					break;
+				// Borrar un departamento por código
+
 				case 4:
-					//"4) Modificar ubicacion de un departamento
+					// "4) Modificar ubicacion de un departamento
 					break;
 				case 5:
-					//5) Consultar departamento por codigo
+					// 5) Consultar departamento por codigo
 					break;
 				case 6:
-					//agregar departamento
+					// agregar departamento
+					
+					break;
+				case 7:
+					int codigoEmpleado = Teclado.leerEntero("Codigo del empleado? ");
+					int codigoNuevoD = Teclado.leerEntero("Codigo del departamento nuevo? ");
+
+					
+					/*if (AccesoDepartamento.consultarDepartamento(codigoEmpleado).getCodigo() != codigoEmpleado) {
+						System.out.println("No existe ese codigo de departamento");
+					}*/
+					
+					List<Departamento> listaDepartamentos = AccesoDepartamento.listarDepartamentos();
+					System.out.println(listaDepartamentos);
+					
+					boolean empleado;
+					empleado = AccesoEmpleado.cambiarDepartamentoEmpleado(codigoEmpleado, codigoNuevoD);
+
+					if (!empleado) {
+						System.out.println("No se ha encontrado ningún empleado con ese codigo en la base de datos.");
+					} else {
+						System.out.println("Se ha cambiado correctamento");
+					}
+					break;
+				case 8:
+					List<Empleado> empleados2;
+					empleados2 = AccesoEmpleado.consultarInformaticosEmpleados();
+					if (empleados2.isEmpty()) {
+						System.out.println("No se ha encontrado ningun empleado");
+					} else {
+						System.out.println(empleados2);
+					}
 					break;
 					
+				case 9:
+					List<Departamento> departamentosAll;
+					departamentosAll = AccesoDepartamento.listarDepartamentos();
+					if (departamentosAll.isEmpty()) {
+						System.out.println("La lista esta vacia, no hay departamentos");
+					} else {
+						System.out.println(departamentosAll);
+					}
 				}
+				
+				
 			} catch (BDException e) {
 				System.out.println(e.getMessage());
 			}

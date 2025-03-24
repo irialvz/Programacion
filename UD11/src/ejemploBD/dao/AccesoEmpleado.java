@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ejemploBD.config.ConfigMySql;
+//import ejemploBD.config.ConfigMySql;
+import ejemploBD.config.ConfigSQLite;
 import ejemploBD.excepciones.BDException;
 import ejemploBD.modelo.Departamento;
 import ejemploBD.modelo.Empleado;
@@ -30,7 +31,7 @@ public class AccesoEmpleado {
 
 		try {
 			// Conexi�n a la bd
-			conexion = ConfigMySql.abrirConexion();
+			conexion = ConfigSQLite.abrirConexion();
 			String query = "SELECT * FROM empleado WHERE salario > ? ORDER by nombre";
 
 			ps = conexion.prepareStatement(query);
@@ -58,7 +59,7 @@ public class AccesoEmpleado {
 			throw new BDException(BDException.ERROR_QUERY + e.getMessage());
 		} finally {
 			if (conexion != null) {
-				ConfigMySql.cerrarConexion(conexion);
+				ConfigSQLite.cerrarConexion(conexion);
 			}
 		}
 		return listaEmpleados;
@@ -70,7 +71,7 @@ public class AccesoEmpleado {
 
 		try {
 			// Conexi�n a la bd
-			conexion = ConfigMySql.abrirConexion();
+			conexion = ConfigSQLite.abrirConexion();
 			String query = "SELECT * FROM empleado WHERE codigo = ? ";
 
 			ps = conexion.prepareStatement(query);
@@ -94,13 +95,81 @@ public class AccesoEmpleado {
 			throw new BDException(BDException.ERROR_QUERY + e.getMessage());
 		} finally {
 			if (conexion != null) {
-				ConfigMySql.cerrarConexion(conexion);
+				ConfigSQLite.cerrarConexion(conexion);
 			}
 		}
 		return empleado;
 	}
 	//public static List<Empleado> consultarEmpleadosDepartamento (){}
-		
+	//Cambiar el departamento de un empleado
+	public static boolean cambiarDepartamentoEmpleado (int codigoEmp,int codigoNuevoD) throws BDException {
+		PreparedStatement ps = null;
+		Connection conexion = null;
+		int resultados = 0;
+		try {
+			// Conexi�n a la bd			
+			conexion = ConfigSQLite.abrirConexion();
+			String query = "UPDATE empleado SET codigo_departamento = ? WHERE codigo = ?" ;
+			
+			ps = (PreparedStatement) conexion.createStatement();			
+			ps.setInt(1, codigoNuevoD);
+			ps.setInt(2, codigoEmp);
+			
+			resultados = ps.executeUpdate(query);
+			
+		} 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+		}		
+		finally {
+			if (conexion!=null) {
+				ConfigSQLite.cerrarConexion(conexion);
+			}
+		}
+		return resultados > 0;
+	}
+	//Buscar todos los codigo y nombres de los empleados que trabajen en el 
+	//departamento de informatica de la empresa
+	public static List<Empleado> consultarInformaticosEmpleados () throws BDException{
+		List<Empleado> listaEmpleados = new ArrayList<Empleado>();
+		PreparedStatement ps = null;
+		Connection conexion = null;
 
+		try {
+			// Conexi�n a la bd
+			conexion = ConfigSQLite.abrirConexion();
+			String query = "SELECT * FROM empleado WHERE codigo_departamento = 1";
+
+			ps = conexion.prepareStatement(query);
+			// Al primer interrogante le asigno salario (ps1)
+			//ps.setFloat(1, salario);
+
+			ResultSet resultados = ps.executeQuery();
+
+			while (resultados.next()) {
+
+				int codigo = resultados.getInt("codigo");
+				String nombre = resultados.getString("nombre");
+				float sal = resultados.getFloat("salario");
+				String fecha = resultados.getString("fecha_alta");
+				int codDpto = resultados.getInt("codigo_departamento");
+
+				Departamento d = new Departamento(codDpto);
+
+				Empleado empleado = new Empleado(codigo, nombre, fecha, sal, d);
+
+				listaEmpleados.add(empleado);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+		} finally {
+			if (conexion != null) {
+				ConfigSQLite.cerrarConexion(conexion);
+			}
+		}
+		return listaEmpleados;
+	}
 	
 }

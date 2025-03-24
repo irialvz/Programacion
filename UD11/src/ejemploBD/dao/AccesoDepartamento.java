@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import ejemploBD.config.ConfigBD;
+import ejemploBD.config.ConfigSQLite;
 import ejemploBD.config.ConfigMySql;
 import ejemploBD.excepciones.BDException;
 import ejemploBD.modelo.Departamento;
@@ -32,7 +32,7 @@ public class AccesoDepartamento {
 
 		try {
 			// Conexi�n a la bd
-			conexion = ConfigBD.abrirConexion();
+			conexion = ConfigSQLite.abrirConexion();
 
 			String query = "SELECT * FROM departamento WHERE ubicacion = ? ORDER BY nombre";
 
@@ -72,7 +72,7 @@ public class AccesoDepartamento {
 
 		try {
 			// Conexi�n a la bd			
-			conexion = ConfigMySql.abrirConexion();
+			conexion = ConfigSQLite.abrirConexion();
 			String query = "SELECT * FROM departamento WHERE ubicacion = '" + ubicacion + "' order by nombre";
 			
 			Statement sentencia = conexion.createStatement();			
@@ -90,7 +90,7 @@ public class AccesoDepartamento {
 		}		
 		finally {
 			if (conexion!=null) {
-				ConfigMySql.cerrarConexion(conexion);
+				ConfigSQLite.cerrarConexion(conexion);
 			}
 		}
 		return listaDepartamentos;
@@ -105,7 +105,7 @@ public class AccesoDepartamento {
 
 		try {
 			// Conexi�n a la bd			
-			conexion = ConfigMySql.abrirConexion();
+			conexion = ConfigSQLite.abrirConexion();
 			String query = "SELECT * FROM departamento WHERE codigo = ? " ;
 			
 			ps = conexion.prepareStatement(query);			
@@ -124,7 +124,7 @@ public class AccesoDepartamento {
 		}		
 		finally {
 			if (conexion!=null) {
-				ConfigMySql.cerrarConexion(conexion);
+				ConfigSQLite.cerrarConexion(conexion);
 			}
 		}
 		return departamento;
@@ -138,7 +138,7 @@ public class AccesoDepartamento {
 		int resultados = 0;
 		try {
 			// Conexi�n a la bd			
-			conexion = ConfigMySql.abrirConexion();
+			conexion = ConfigSQLite.abrirConexion();
 			String query = "UPDATE departamento SET ubicacion = ? WHERE codigo = ?" ;
 			
 			ps = (PreparedStatement) conexion.createStatement();			
@@ -154,7 +154,7 @@ public class AccesoDepartamento {
 		}		
 		finally {
 			if (conexion!=null) {
-				ConfigMySql.cerrarConexion(conexion);
+				ConfigSQLite.cerrarConexion(conexion);
 			}
 		}
 		return resultados > 0;
@@ -167,7 +167,7 @@ public class AccesoDepartamento {
 		int resultados = 0;
 		try {
 			// Conexi�n a la bd			
-			conexion = ConfigMySql.abrirConexion();
+			conexion = ConfigSQLite.abrirConexion();
 			String query = "DELETE departamento WHERE codigo = ?" ;
 			
 			ps = (PreparedStatement) conexion.createStatement();			
@@ -182,18 +182,18 @@ public class AccesoDepartamento {
 		}		
 		finally {
 			if (conexion!=null) {
-				ConfigMySql.cerrarConexion(conexion);
+				ConfigSQLite.cerrarConexion(conexion);
 			}
 		}
 		return resultados > 0;
 	}
-	public static List<Departamento> agregarDepartamento(String nombre,String ubicacion) throws BDException {
+	public static boolean agregarDepartamento(String nombre,String ubicacion) throws BDException {
 		List<Departamento> listaDepartamentos = new ArrayList<>();
 		PreparedStatement ps = null;
 		Connection conexion = null;
 		try {
 			// Conexi�n a la bd			
-			conexion = ConfigMySql.abrirConexion();
+			conexion = ConfigSQLite.abrirConexion();
 			String query = "INSERT INTO departamento (nombre,ubicacion) VALUES = (?,?)" ;
 			
 			ps = (PreparedStatement) conexion.createStatement();			
@@ -210,14 +210,42 @@ public class AccesoDepartamento {
 		}		
 		finally {
 			if (conexion!=null) {
-				ConfigMySql.cerrarConexion(conexion);
+				ConfigSQLite.cerrarConexion(conexion);
 			}
 		}
 		return listaDepartamentos;
 		
 	}
 	// Consultar todos los departamentos ordenados por nombre
-	
+	public static List<Departamento> listarDepartamentos () throws BDException{
+		List<Departamento> listaDepartamentos = new ArrayList<>();
+		Statement ps = null;
+		Connection conexion = null;
+		try {
+			// Conexi�n a la bd			
+			conexion = ConfigSQLite.abrirConexion();
+			String query = "SELECT * FROM departamento ORDER BY nombre ASC" ;
+			
+			ps =  conexion.createStatement();
+			ResultSet resultados = ps.executeQuery(query);
+			while (resultados.next()) {
+				Departamento departamento = new Departamento(resultados.getInt("codigo"),
+						resultados.getString("nombre"), resultados.getString("ubicacion"));
+				listaDepartamentos.add(departamento);
+			}
+			
+		} 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+		}		
+		finally {
+			if (conexion!=null) {
+				ConfigSQLite.cerrarConexion(conexion);
+			}
+		}
+		return listaDepartamentos;
+	}
 	
 
 	
