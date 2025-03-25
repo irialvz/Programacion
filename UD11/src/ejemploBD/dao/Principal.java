@@ -1,5 +1,6 @@
 package ejemploBD.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ejemploBD.excepciones.BDException;
@@ -20,6 +21,7 @@ public class Principal {
 		System.out.println("7) Cambiar departamento a un empleado");
 		System.out.println("8) Consultar informaticos en la empresa");
 		System.out.println("9) Consultar todos los departamentos ordenados por nombre");
+		System.out.println("10) Exportar empleamos a fichero CSV");
 
 
 	}
@@ -200,7 +202,16 @@ public class Principal {
 							System.out.println(e.toString());
 						}
 					}
+				case 10:
+					ArrayList<Empleado> empleadosArrayList;
+					empleadosArrayList = AccesoEmpleado.consultarEmpleados();
+					if (empleadosArrayList.isEmpty()) {
+						System.out.println("La lista esta vacia,no hay empleados dentro");
+					} else {
+						AccesoEmpleado.exportarFicheroCSV("miFichero", empleadosArrayList);
+					}
 				}
+				
 				
 				
 			} catch (BDException e) {
