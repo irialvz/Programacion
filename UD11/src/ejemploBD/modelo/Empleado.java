@@ -1,6 +1,8 @@
 package ejemploBD.modelo;
 
 public class Empleado {
+	private static final String SEPARADOR = ";";
+
 	
 	private int codigo;
 	private String nombre;
@@ -61,6 +63,11 @@ public class Empleado {
 	public String toString() {
 		return "Empleado [codigo=" + codigo + ", nombre=" + nombre + ", fechaAlta=" + fechaAlta + ", salario=" + salario
 				+ ", departamento=" + departamento + "]";
+	}
+	
+	public String toStringWithSeparators() {
+		return this.codigo + SEPARADOR + this.nombre + SEPARADOR + this.fechaAlta + SEPARADOR 
+				+ this.salario + SEPARADOR+ departamento;		
 	}
 		
 }

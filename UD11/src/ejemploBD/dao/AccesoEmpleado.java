@@ -1,5 +1,9 @@
 package ejemploBD.dao;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -168,4 +172,71 @@ public class AccesoEmpleado {
 		return listaEmpleados;
 	}
 	
+	public static ArrayList<Empleado> consultarEmpleados() throws BDException{
+		ArrayList<Empleado> arrayEmpleados = new ArrayList<Empleado>();
+		PreparedStatement ps = null;
+		Connection conexion = null;
+
+		try {
+			// Conexi�n a la bd
+			conexion = ConfigSQLite.abrirConexion();
+			String query = "SELECT e.codigo,e.nombre,e.salario,e.fecha_alta,e.codigo_departamento,d.nombre,d.ubicacion "
+					+ "FROM empleado e JOIN departamento d ON (e.codigo_departamento = d.codigo)  ";
+
+			ps = conexion.prepareStatement(query);
+			ResultSet resultados = ps.executeQuery();
+
+			while (resultados.next()) {
+
+				int codigoEmp = resultados.getInt("e.codigo");
+				String nombre = resultados.getString("e.nombre");
+				float sal = resultados.getFloat("e.salario");
+				String fecha = resultados.getString("e.fecha_alta");
+				int codDpto = resultados.getInt("e.codigo_departamento");
+				String nombreDep = resultados.getString("d.nombre");
+				String ubicacionD = resultados.getString("d.ubicacion");
+
+
+				Departamento d = new Departamento(codDpto,nombreDep,ubicacionD);
+
+				Empleado empleado = new Empleado(codigoEmp, nombre, fecha, sal, d);
+
+				arrayEmpleados.add(empleado);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+		} finally {
+			if (conexion != null) {
+				ConfigSQLite.cerrarConexion(conexion);
+			}
+		}
+		return arrayEmpleados;
+	}
+	public static void exportarFicheroCSV(String nombreFichero, ArrayList<Empleado> Empleados){
+		BufferedWriter bw = null;
+		try {
+			File fichero = new File(nombreFichero);
+			bw = new BufferedWriter(new FileWriter(fichero, false));
+			for (Empleado empleado : Empleados) {				
+				bw.write(empleado.toStringWithSeparators());
+				bw.newLine();
+			}
+		} 
+		catch(IOException ioe) {
+			System.out.println("Error al escribir en el fichero: " + ioe.getMessage());
+			ioe.printStackTrace();
+		}
+		finally {
+			try {
+				if (bw != null) {
+					bw.close();
+				}
+			}
+			catch (IOException ioe) {
+				System.out.println("Error al cerrar el fichero: " + ioe.getMessage());
+				ioe.printStackTrace();
+			}
+		}
+	}
 }

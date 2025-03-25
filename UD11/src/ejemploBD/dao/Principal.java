@@ -128,6 +128,7 @@ public class Principal {
 					}
 					break;
 				case 7:
+					//PREGUNTA EL CODIGO DEL EMPLEADO
 					int codigoEmpleado = Teclado.leerEntero("Codigo del empleado? ");
 					Empleado emp7 = AccesoEmpleado.consultarEmpleadoCodigo(codigoEmpleado);
 					while (emp7 == null) {
@@ -136,6 +137,9 @@ public class Principal {
 						emp7 = AccesoEmpleado.consultarEmpleadoCodigo(codigoEmpleado);
 					}
 					System.out.println(emp7.toString());
+					
+					
+					//MUESTRA LISTA DE DEPARTAMENTOS
 					System.out.println("\nLISTA DE DEPARTAMENTOS");
 					List<Departamento> listaDepartamentos = AccesoDepartamento.listarDepartamentos();
 					for (Departamento d : listaDepartamentos) {
@@ -143,8 +147,13 @@ public class Principal {
 					}
 					System.out.println();
 					
+					
+					//PREGUNTA EL NOMBRE DEL DEPARTAMENTO
 					String nomDep7 = Teclado.leerCadena("Nombre del departamento? ");
 					boolean existe = AccesoDepartamento.existeDepartamentoNombre(nomDep7);
+					
+					
+					//SI NO EXISTE LE PERMITE CREARLO O NO
 					while (!existe) {
 						System.out.println("No existe un departamento con ese nombre");
 						boolean agregarDep = Teclado.leerBooleano("Agregar departamento con ese nombre? true/false");
