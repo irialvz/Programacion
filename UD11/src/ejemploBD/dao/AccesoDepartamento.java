@@ -95,6 +95,37 @@ public class AccesoDepartamento {
 		}
 		return listaDepartamentos;
 	}
+	//Consultar departamento por nombre
+	public static boolean existeDepartamentoNombre(String nombreDepartamento) throws BDException{
+
+		Departamento departamento =null;
+		PreparedStatement ps = null;
+		Connection conexion = null;
+		ResultSet resultados;
+		boolean existe = false;
+
+		try {
+			// Conexi�n a la bd			
+			conexion = ConfigSQLite.abrirConexion();
+			String query = "SELECT * FROM departamento WHERE nombre = ? " ;
+			
+			ps = conexion.prepareStatement(query);			
+			ps.setString(1, nombreDepartamento);
+			
+			resultados = ps.executeQuery();
+			existe = resultados.next();
+		} 
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+		}		
+		finally {
+			if (conexion!=null) {
+				ConfigSQLite.cerrarConexion(conexion);
+			}
+		}
+		return existe;
+	}
 	
 	// Consultar el departamento por c�digo
 	public static Departamento consultarDepartamento(int codigoDepartamento) throws BDException{
@@ -185,12 +216,13 @@ public class AccesoDepartamento {
 				ConfigSQLite.cerrarConexion(conexion);
 			}
 		}
-		return resultados > 0;
+		return resultados == 1;
 	}
 	public static boolean agregarDepartamento(String nombre,String ubicacion) throws BDException {
 		List<Departamento> listaDepartamentos = new ArrayList<>();
 		PreparedStatement ps = null;
 		Connection conexion = null;
+		int resultados = 0;
 		try {
 			// Conexi�n a la bd			
 			conexion = ConfigSQLite.abrirConexion();
@@ -200,7 +232,7 @@ public class AccesoDepartamento {
 			ps.setString(1, nombre);
 			ps.setString(2, ubicacion);
 			
-			ResultSet resultados = ps.executeQuery(query);
+			resultados = ps.executeUpdate(query);
 			
 			
 		} 
@@ -213,7 +245,7 @@ public class AccesoDepartamento {
 				ConfigSQLite.cerrarConexion(conexion);
 			}
 		}
-		return listaDepartamentos;
+		return resultados == 1;
 		
 	}
 	// Consultar todos los departamentos ordenados por nombre

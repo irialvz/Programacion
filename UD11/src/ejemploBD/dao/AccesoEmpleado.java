@@ -100,22 +100,21 @@ public class AccesoEmpleado {
 		}
 		return empleado;
 	}
-	//public static List<Empleado> consultarEmpleadosDepartamento (){}
 	//Cambiar el departamento de un empleado
-	public static boolean cambiarDepartamentoEmpleado (int codigoEmp,int codigoNuevoD) throws BDException {
+	public static boolean cambiarDepartamentoEmpleado (int codigoEmp,String nombreDep) throws BDException {
 		PreparedStatement ps = null;
 		Connection conexion = null;
 		int resultados = 0;
 		try {
 			// Conexi�n a la bd			
 			conexion = ConfigSQLite.abrirConexion();
-			String query = "UPDATE empleado SET codigo_departamento = ? WHERE codigo = ?" ;
+			String query = "UPDATE empleado SET codigo_departamento = (SELECT codigo FROM departamento WHERE nombre = ?) WHERE codigo = ?" ;
 			
-			ps = (PreparedStatement) conexion.createStatement();			
-			ps.setInt(1, codigoNuevoD);
+			ps = conexion.prepareStatement(query);			
+			ps.setString(1, nombreDep);
 			ps.setInt(2, codigoEmp);
 			
-			resultados = ps.executeUpdate(query);
+			resultados = ps.executeUpdate();
 			
 		} 
 		catch (SQLException e) {
@@ -127,7 +126,7 @@ public class AccesoEmpleado {
 				ConfigSQLite.cerrarConexion(conexion);
 			}
 		}
-		return resultados > 0;
+		return resultados == 1;
 	}
 	//Buscar todos los codigo y nombres de los empleados que trabajen en el 
 	//departamento de informatica de la empresa
@@ -139,12 +138,9 @@ public class AccesoEmpleado {
 		try {
 			// Conexi�n a la bd
 			conexion = ConfigSQLite.abrirConexion();
-			String query = "SELECT * FROM empleado WHERE codigo_departamento = 1";
+			String query = "SELECT * FROM empleado e JOIN departamento d ON (e.codigo_departamento = d.codigo) WHERE d.nombre = 'Informatica' ";
 
 			ps = conexion.prepareStatement(query);
-			// Al primer interrogante le asigno salario (ps1)
-			//ps.setFloat(1, salario);
-
 			ResultSet resultados = ps.executeQuery();
 
 			while (resultados.next()) {
