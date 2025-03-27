@@ -1,0 +1,10 @@
+/**
+ * 
+ */
+/**
+ * 
+ */
+module ficherosTeresa {
+	requires teclado;
+
+}
