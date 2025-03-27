@@ -22,6 +22,8 @@ public class Principal {
 		System.out.println("8) Consultar informaticos en la empresa");
 		System.out.println("9) Consultar todos los departamentos ordenados por nombre");
 		System.out.println("10) Exportar empleamos a fichero CSV");
+		System.out.println("11) Importar fichero CSV");
+
 
 
 	}
@@ -203,17 +205,31 @@ public class Principal {
 						}
 					}
 				case 10:
+					String nombreArch = Teclado.leerCadena("Nombre del archivo?");
 					ArrayList<Empleado> empleadosArrayList;
 					empleadosArrayList = AccesoEmpleado.consultarEmpleados();
 					if (empleadosArrayList.isEmpty()) {
 						System.out.println("La lista esta vacia,no hay empleados dentro");
 					} else {
-						AccesoEmpleado.exportarFicheroCSV("miFichero", empleadosArrayList);
+						AccesoEmpleado.exportarFicheroCSV(nombreArch, empleadosArrayList);
+						for (Empleado emp : empleadosArrayList) {
+							System.out.println(emp.toStringWithSeparators());
+						}
 					}
+				case 11:
+					String rutaArch = Teclado.leerCadena("Ruta del archivo ?");
+					ArrayList<Empleado> empleadosImportados;
+					empleadosImportados = AccesoEmpleado.importarFicheroCsv(rutaArch);
+					if (empleadosImportados.isEmpty()) {
+						System.out.println("La lista esta vacia");
+					}else {
+						for (Empleado emp : empleadosImportados) {
+							System.out.println(emp.toStringWithSeparators());
+						}
+					}
+
 				}
-				
-				
-				
+					
 			} catch (BDException e) {
 				System.out.println(e.getMessage());
 			}

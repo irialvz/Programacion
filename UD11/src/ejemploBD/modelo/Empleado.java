@@ -1,5 +1,8 @@
 package ejemploBD.modelo;
 
+import ejemploBD.dao.AccesoDepartamento;
+import ejemploBD.excepciones.BDException;
+
 public class Empleado {
 	private static final String SEPARADOR = ";";
 
@@ -26,6 +29,15 @@ public class Empleado {
 		this.fechaAlta = fechaAlta;
 		this.salario = salario;
 		this.departamento = departamento;
+	}
+	
+	public Empleado(String linea) throws NumberFormatException, BDException {
+		String[] datos = linea.split(SEPARADOR);
+		this.codigo = Integer.parseInt(datos[0]);
+		this.nombre = datos[1];
+		this.fechaAlta = datos[2];
+		this.salario = Float.parseFloat(datos[3]);
+		this.departamento = AccesoDepartamento.consultarDepartamento(Integer.parseInt(datos[4]));
 	}
 		
 	public int getCodigo() {
@@ -66,8 +78,13 @@ public class Empleado {
 	}
 	
 	public String toStringWithSeparators() {
-		return this.codigo + SEPARADOR + this.nombre + SEPARADOR + this.fechaAlta + SEPARADOR 
-				+ this.salario + SEPARADOR+ departamento;		
+		return this.codigo + SEPARADOR + 
+				this.nombre + SEPARADOR + 
+				this.fechaAlta + SEPARADOR 
+				+ this.salario + SEPARADOR+ 
+				this.departamento.getCodigo() + SEPARADOR + 
+				this.departamento.getNombre() + SEPARADOR + 
+				this.departamento.getUbicacion();		
 	}
 		
 }

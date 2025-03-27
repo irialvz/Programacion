@@ -1,7 +1,10 @@
 package ejemploBD.dao;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -188,13 +191,13 @@ public class AccesoEmpleado {
 
 			while (resultados.next()) {
 
-				int codigoEmp = resultados.getInt("e.codigo");
-				String nombre = resultados.getString("e.nombre");
-				float sal = resultados.getFloat("e.salario");
-				String fecha = resultados.getString("e.fecha_alta");
-				int codDpto = resultados.getInt("e.codigo_departamento");
-				String nombreDep = resultados.getString("d.nombre");
-				String ubicacionD = resultados.getString("d.ubicacion");
+				int codigoEmp = resultados.getInt("codigo");
+				String nombre = resultados.getString("nombre");
+				float sal = resultados.getFloat("salario");
+				String fecha = resultados.getString("fecha_alta");
+				int codDpto = resultados.getInt("codigo_departamento");
+				String nombreDep = resultados.getString("nombre");
+				String ubicacionD = resultados.getString("ubicacion");
 
 
 				Departamento d = new Departamento(codDpto,nombreDep,ubicacionD);
@@ -239,4 +242,94 @@ public class AccesoEmpleado {
 			}
 		}
 	}
+	public static ArrayList<Empleado> importarFicheroCsv(String nombreFichero) {
+		ArrayList<Empleado> empleados = new ArrayList<Empleado>();
+		BufferedReader br = null;
+		try {
+			// Abre fichero de alumnos en modo lectura
+			br = new BufferedReader(new FileReader(new File(nombreFichero)));
+			
+			// Lectura linea por línea del fichero de alumnos
+      		String linea = br.readLine(); 
+      		while (linea != null) { 
+      			// Construye alumno a partir de la linea
+      			Empleado empleado = new Empleado(linea);
+      			// Inserta el alumno en el Array
+      			AccesoEmpleado.;
+      			linea = br.readLine();
+      		}     		
+		}
+		catch (FileNotFoundException fnfe) {                      
+			System.out.println("Error al abrir el fichero: " + fnfe.getMessage());
+			fnfe.printStackTrace();
+		}
+		catch (IOException ioe) {
+			System.out.println("Error al leer del fichero: " + ioe.getMessage());
+			ioe.printStackTrace();
+		}
+		catch (NumberFormatException nfe) {
+			System.out.println("Error al convertir de cadena a n�mero: " + nfe.getMessage());
+			nfe.printStackTrace();
+		} catch (BDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				if (br != null) {
+					br.close();
+				}
+			}
+			catch (IOException ioe) {
+				System.out.println("Error al cerrar el fichero: " + ioe.getMessage());
+				ioe.printStackTrace();
+			}
+		}
+		
+		return empleados;
+	}
+	
+	/*public static void leerArchivoCsv(String rutaArch) {
+		BufferedReader br = null;
+		try {
+			File fichero = new File(rutaArch);
+			br = new BufferedReader(new FileReader(fichero));
+			int contador = 0;
+      		String linea = br.readLine(); 
+      		while (linea != null) { 	
+      			Empleado empleado = new Empleado(linea);
+      			System.out.println(empleado.toString());
+      			contador++;
+      			linea = br.readLine();
+      		}
+      		System.out.println("Se han leído " + contador + " empleados del fichero de texto.");
+		}
+		catch (FileNotFoundException fnfe) {                      
+			System.out.println("Error al abrir el fichero: " + fnfe.getMessage());
+			fnfe.printStackTrace();
+		}
+		catch (IOException ioe) {
+			System.out.println("Error al leer del fichero: " + ioe.getMessage());
+			ioe.printStackTrace();
+		}
+		catch (NumberFormatException nfe) {
+			System.out.println("Error al convertir de cadena a n�mero: " + nfe.getMessage());
+			nfe.printStackTrace();
+		} catch (BDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				if (br != null) {
+					br.close();
+				}
+			}
+			catch (IOException ioe) {
+				System.out.println("Error al cerrar el fichero: " + ioe.getMessage());
+				ioe.printStackTrace();
+			}
+		}
+		
+	}*/
 }
