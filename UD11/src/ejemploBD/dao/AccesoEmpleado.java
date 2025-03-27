@@ -242,6 +242,74 @@ public class AccesoEmpleado {
 			}
 		}
 	}
+	public static boolean añadirEmpleado(Empleado empleado) throws BDException {
+	    PreparedStatement ps = null;
+	    Connection conexion = null;
+	    int resultados = 0;
+	    try {
+	        // Conexión a la base de datos
+	        conexion = ConfigSQLite.abrirConexion();
+	        String query = "INSERT INTO empleado (codigo, nombre, fecha_alta, salario, codigo_departamento) "
+	                     + "VALUES (?, ?, ?, ?, ?)";
+
+	        ps = conexion.prepareStatement(query);
+	        ps.setInt(1, empleado.getCodigo());
+	        ps.setString(2, empleado.getNombre());
+	        ps.setString(3, empleado.getFechaAlta());
+	        ps.setFloat(4, empleado.getSalario());
+	        ps.setInt(5, empleado.getDepartamento().getCodigo());
+
+	        resultados = ps.executeUpdate();
+	    } catch (SQLException e) {
+	        throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+	    } finally {
+	        if (conexion != null) {
+	            ConfigSQLite.cerrarConexion(conexion);
+	        }
+	    }
+	    return resultados == 1;
+	}
+	public static boolean eliminarEmpleado(int codigoEmpleado) throws BDException {
+	    PreparedStatement ps = null;
+	    Connection conexion = null;
+	    int resultados = 0;
+	    try {
+	        // Conexión a la base de datos
+	        conexion = ConfigSQLite.abrirConexion();
+	        String query = "DELETE FROM empleado WHERE codigo = ?";
+
+	        ps = conexion.prepareStatement(query);
+	        ps.setInt(1, codigoEmpleado);
+
+	        resultados = ps.executeUpdate();
+	    } catch (SQLException e) {
+	        throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+	    } finally {
+	        if (conexion != null) {
+	            ConfigSQLite.cerrarConexion(conexion);
+	        }
+	    }
+	    return resultados == 1;
+	}
+    public static boolean borrarEmpleadoCodigo(int codigo, String opcion) throws BDException {
+        int filas = 0;
+        Connection conexion = null;
+
+        try {
+            String queryDelete = "DELETE FROM empleado WHERE codigo = ?"; // ?????
+            PreparedStatement ps = conexion.prepareStatement(queryDelete);
+            ps.setInt(1, codigo);
+            filas = ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+        } finally {
+            if (conexion != null) {
+                    ConfigSQLite.cerrarConexion(conexion);
+                }
+        }
+        return filas == 1;
+    }
+	
 	public static ArrayList<Empleado> importarFicheroCsv(String nombreFichero) {
 		ArrayList<Empleado> empleados = new ArrayList<Empleado>();
 		BufferedReader br = null;
@@ -249,13 +317,13 @@ public class AccesoEmpleado {
 			// Abre fichero de alumnos en modo lectura
 			br = new BufferedReader(new FileReader(new File(nombreFichero)));
 			
-			// Lectura linea por línea del fichero de alumnos
+			// Lectura linea por línea del fichero de empleados
       		String linea = br.readLine(); 
       		while (linea != null) { 
-      			// Construye alumno a partir de la linea
+      			// Construye empleado a partir de la linea
       			Empleado empleado = new Empleado(linea);
-      			// Inserta el alumno en el Array
-      			AccesoEmpleado.;
+      			// Inserta los empleados en la coleccion
+      			AccesoEmpleado.añadirEmpleado(empleado);
       			linea = br.readLine();
       		}     		
 		}

@@ -58,7 +58,7 @@ public class Empleado {
 	public void setFechaAlta(String fechaAlta) {
 		this.fechaAlta = fechaAlta;
 	}
-	public double getSalario() {
+	public float getSalario() {
 		return salario;
 	}
 	public void setSalario(float salario) {
