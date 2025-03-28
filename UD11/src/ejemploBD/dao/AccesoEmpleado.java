@@ -291,7 +291,30 @@ public class AccesoEmpleado {
 	    }
 	    return resultados == 1;
 	}
-    public static boolean borrarEmpleadoCodigo(int codigo, String opcion) throws BDException {
+	public static boolean modificarEmpleado(Empleado empleado) throws BDException {
+	    PreparedStatement ps = null;
+	    Connection conexion = null;
+	    int resultados = 0;
+	    try {
+	        // Conexión a la base de datos
+	        conexion = ConfigSQLite.abrirConexion();
+	        String query = "UPDATE FROM empleado WHERE codigo = ?";
+
+	        ps = conexion.prepareStatement(query);
+	        ps.setInt(1, codigoEmpleado);
+
+	        resultados = ps.executeUpdate();
+	    } catch (SQLException e) {
+	        throw new BDException(BDException.ERROR_QUERY + e.getMessage());
+	    } finally {
+	        if (conexion != null) {
+	            ConfigSQLite.cerrarConexion(conexion);
+	        }
+	    }
+	    return resultados == 1;
+	}
+	
+    public static boolean borrarEmpleadoCodigo(int codigo) throws BDException {
         int filas = 0;
         Connection conexion = null;
 
@@ -320,10 +343,13 @@ public class AccesoEmpleado {
 			// Lectura linea por línea del fichero de empleados
       		String linea = br.readLine(); 
       		while (linea != null) { 
-      			// Construye empleado a partir de la linea
       			Empleado empleado = new Empleado(linea);
-      			// Inserta los empleados en la coleccion
-      			AccesoEmpleado.añadirEmpleado(empleado);
+      			try {
+      				AccesoEmpleado.añadirEmpleado(empleado);
+      			}catch (BDException e) {
+					// TODO: handle exception
+      				AccesoEmpleado.modificarEmpleado(empleado);
+				}
       			linea = br.readLine();
       		}     		
 		}

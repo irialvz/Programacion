@@ -211,10 +211,7 @@ public class Principal {
 					if (empleadosArrayList.isEmpty()) {
 						System.out.println("La lista esta vacia,no hay empleados dentro");
 					} else {
-						AccesoEmpleado.exportarFicheroCSV(nombreArch, empleadosArrayList);
-						for (Empleado emp : empleadosArrayList) {
-							System.out.println(emp.toStringWithSeparators());
-						}
+						AccesoEmpleado.exportarFicheroCSV(nombreArch, empleadosArrayList);						
 					}
 				case 11:
 					String rutaArch = Teclado.leerCadena("Ruta del archivo ?");
@@ -223,11 +220,7 @@ public class Principal {
 					if (empleadosImportados.isEmpty()) {
 						System.out.println("La lista esta vacia");
 					}else {
-						for (Empleado emp : empleadosImportados) {
-							System.out.println(emp.toStringWithSeparators());
-						}
-					}
-
+						System.out.println("Se ha importado correctamente");
 				}
 					
 			} catch (BDException e) {

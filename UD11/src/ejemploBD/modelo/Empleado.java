@@ -37,7 +37,7 @@ public class Empleado {
 		this.nombre = datos[1];
 		this.fechaAlta = datos[2];
 		this.salario = Float.parseFloat(datos[3]);
-		this.departamento = AccesoDepartamento.consultarDepartamento(Integer.parseInt(datos[4]));
+		this.departamento = new Departamento(datos[4],datos[5]);
 	}
 		
 	public int getCodigo() {
