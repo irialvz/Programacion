@@ -222,11 +222,11 @@ public class Principal {
 					}else {
 						System.out.println("Se ha importado correctamente");
 				}
+				}
 					
 			} catch (BDException e) {
 				System.out.println(e.getMessage());
 			}
 		}
-
 	}
 }

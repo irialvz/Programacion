@@ -7,13 +7,20 @@
     <fullyQualifiedTypeName name="java.util.Scanner"/>
     <fullyQualifiedTypeName name="org.sqlite.SQLiteConfig"/>
     <fullyQualifiedTypeName name="ejemploBD.config.ConfigSQLite"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="ejemploBD.dao.AccesoDepartamento"/>
-    <fullyQualifiedTypeName name="java.lang.String"/>
     <fullyQualifiedTypeName name="java.lang.classfile.instruction.SwitchCase"/>
     <fullyQualifiedTypeName name="java.lang.ClassCastException"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="ejemploBD.modelo.Departamento"/>
     <fullyQualifiedTypeName name="ejemploBD.dao.AccesoEmpleado"/>
     <fullyQualifiedTypeName name="ejemploBD.modelo.Empleado"/>
+    <fullyQualifiedTypeName name="java.security.PublicKey"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.nio.channels.SelectableChannel"/>
+    <fullyQualifiedTypeName name="config.ConfigSQLite"/>
+    <fullyQualifiedTypeName name="java.sql.ResultSet"/>
+    <fullyQualifiedTypeName name="models.Socio"/>
+    <fullyQualifiedTypeName name="exceptions.BDException"/>
+    <fullyQualifiedTypeName name="java.lang.String"/>
+    <fullyQualifiedTypeName name="entrada.Teclado"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
 </qualifiedTypeNameHistroy>
