@@ -5,8 +5,6 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.ArrayList;
 import com.google.gson.reflect.TypeToken;
-
-import java.io.FileReader;
 import java.io.Reader;
 
 public class JsonUtil {
