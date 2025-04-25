@@ -10,7 +10,7 @@ public class ConfigMongo {
 	private static MongoClient cliente;
         
     private static final String URI = "mongodb://localhost:27017";
-    private static final String nombre = "empresa";
+    private static final String nombre = "local";
     
    
     public static MongoDatabase abrirConexion() {    	    	    

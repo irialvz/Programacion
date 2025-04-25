@@ -15,7 +15,7 @@ public class AppPrincipal {
 		try {
 			// Ejemplo de buscar todos los empleados de la base de datos
 			MongoDatabase conexion = ConfigMongo.abrirConexion();
-			MongoCollection<Document> empleados = conexion.getCollection("empresa");
+			MongoCollection<Document> empleados = conexion.getCollection("Empresa");
 
 			mostrarTodosLosEmpleados(empleados);
 			buscarYMostrarEmpleadoPorNombreYEdad(empleados, "María", 30);

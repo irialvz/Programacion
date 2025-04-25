@@ -46,5 +46,41 @@ public class GestorEmpleado {
 
 		return lista;
 	}
+	public static boolean borrarEmpleadosInactivos(MongoCollection<Document> collection) throws Exception {
+		boolean eliminado = false;
+		ArrayList<Empleado> lista = new ArrayList<>();
+		FindIterable<Document> resultados = collection.find();
+		
+		for (Document doc : resultados) {
+			String nombre = doc.getString("nombre");
+			Integer edad = doc.getInteger("edad", 0);
+			String puesto = doc.getString("puesto");
+			Double salario = doc.getDouble("salario");
+			Boolean activo = doc.getBoolean("activo", false);
+			
+			Empleado empleado = new Empleado(nombre,edad,puesto,salario,activo);
+			eliminado = lista.remove(empleado);
+		}
+		return eliminado;
+	}
+
+	public static boolean insertarEmpleados(MongoCollection<Document> collection, ArrayList<Empleado> empleados) {
+		boolean insertado = false;
+		//ArrayList<Empleado> lista = new ArrayList<>();
+		FindIterable<Document> resultados = collection.find();
+		for (Empleado empleado : empleados) {
+			for (Document doc : resultados) {
+				if (doc.getString("nombre").equalsIgnoreCase(empleado.getNombre())) {
+					insertado = false;
+				} else {
+					String nombre = empleado.getNombre() ;
+					Integer edad = empleado.getEdad();
+					String puesto = empleado.getPuesto();
+					//Double salario = empleado.get
+				}
+			}
+		}
+		return insertado;
+	}
 
 }
