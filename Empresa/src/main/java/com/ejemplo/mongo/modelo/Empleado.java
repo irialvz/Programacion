@@ -66,6 +66,6 @@ public class Empleado {
                 ", puesto='" + puesto + '\'' +
                 ", salario=" + salario +
                 ", activo=" + activo +
-                '}';
+                '}' + "\n";
     }
 }
