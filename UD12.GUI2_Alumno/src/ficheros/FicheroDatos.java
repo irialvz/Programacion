@@ -1,5 +1,6 @@
 package ficheros;
 
+import java.io.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
@@ -8,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import modelo.Trabajador;
 
@@ -16,6 +18,17 @@ import modelo.Trabajador;
  *
  */
 public class FicheroDatos {
+	
+	public static List<Trabajador> leerFicheroBinario(String rutaFichero){
+		List<Trabajador> lista = new ArrayList<>();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaFichero))) {
+            lista = (List<Trabajador>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("No se pudo leer el fichero: " + e.getMessage());
+        }
+        return lista;
+	}
+	
 	
 	/**
 	 * Escribe un ArrayList en el fichero
@@ -54,6 +67,42 @@ public class FicheroDatos {
 		}		
 	}
 	
+	/**
+	 * Escribe un ArrayList en el fichero
+	 * @param ruta
+	 * @param trabajador
+	 */
+	public static void escribirTrabajador(String ruta, Trabajador trabajador){
+		
+		DataOutputStream fichero = null;
+		try {
+			fichero = new DataOutputStream (new FileOutputStream(ruta)); 
+			for(int i=0; i<trabajador.size(); i++){
+				fichero.writeInt(trabajador.get(i).getIdentificador());
+				fichero.writeUTF(trabajador.get(i).getDni());
+				fichero.writeUTF(trabajador.get(i).getNombre());
+				fichero.writeUTF(trabajador.get(i).getApellidos());
+				fichero.writeUTF(trabajador.get(i).getDireccion());
+				fichero.writeUTF(trabajador.get(i).getTelefono());
+				fichero.writeUTF(trabajador.get(i).getPuesto());
+			}		
+		} 
+		catch (FileNotFoundException e1){
+			System.out.printf("Error al abrir fichero para escritura");
+		}
+		catch (IOException e){ 
+			System.out.printf("Error al escribir en el fichero%n"); 
+		} 
+		finally{ 
+			try{
+			fichero.close();
+			} 
+			catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			}
+		}		
+	}
 	/**
 	 * Devuelve un arraylist con los trabajadores del fichero
 	 * @param rutaFichero

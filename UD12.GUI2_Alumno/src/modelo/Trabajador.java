@@ -3,12 +3,18 @@
  */
 package modelo;
 
+import java.io.Serializable;
+
 /**
  * @author alumno
  *
  */
-public class Trabajador {
+public class Trabajador implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int identificador;
 	private String dni;
 	private String nombre;
