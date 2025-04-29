@@ -77,15 +77,14 @@ public class FicheroDatos {
 		DataOutputStream fichero = null;
 		try {
 			fichero = new DataOutputStream (new FileOutputStream(ruta)); 
-			for(int i=0; i<trabajador.size(); i++){
-				fichero.writeInt(trabajador.get(i).getIdentificador());
-				fichero.writeUTF(trabajador.get(i).getDni());
-				fichero.writeUTF(trabajador.get(i).getNombre());
-				fichero.writeUTF(trabajador.get(i).getApellidos());
-				fichero.writeUTF(trabajador.get(i).getDireccion());
-				fichero.writeUTF(trabajador.get(i).getTelefono());
-				fichero.writeUTF(trabajador.get(i).getPuesto());
-			}		
+				fichero.writeInt(trabajador.getIdentificador());
+				fichero.writeUTF(trabajador.getDni());
+				fichero.writeUTF(trabajador.getNombre());
+				fichero.writeUTF(trabajador.getApellidos());
+				fichero.writeUTF(trabajador.getDireccion());
+				fichero.writeUTF(trabajador.getTelefono());
+				fichero.writeUTF(trabajador.getPuesto());
+					
 		} 
 		catch (FileNotFoundException e1){
 			System.out.printf("Error al abrir fichero para escritura");

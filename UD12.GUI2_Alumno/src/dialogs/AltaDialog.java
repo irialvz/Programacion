@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import dao.TablaTrabajadores;
+import ficheros.FicheroDatos;
 import modelo.Empresa;
 import modelo.Trabajador;
 
@@ -190,6 +191,7 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 				if (comprobarErrores()) {
 					Trabajador t = new Trabajador(id, dni, nombre, apellidos, direccion, telefono, puesto);
 					TablaTrabajadores.insertarOActualizar(t);
+					FicheroDatos.escribirTrabajador("ficheroDatos/empresa.dat", t);
 					if (empresa.altaTrabajador(t)) {
 						JOptionPane.showMessageDialog(null, "Datos introducidos correctamente");
 					} else {
