@@ -41,6 +41,21 @@ public class Trabajador implements Serializable{
 		this.telefono = telefono;
 		this.puesto = puesto;
 	}
+	public Trabajador(String dni, String nombre,
+			String apellidos, String direccion, String telefono, String puesto) {
+		this.dni = dni;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.direccion = direccion;
+		this.telefono = telefono;
+		this.puesto = puesto;
+	}
+	
+	@Override
+	public String toString() {
+		return "ID: " + identificador + "\nDNI: "+ dni + "\nNOMBRE: " + nombre + "\nApellidos: "
+				+ apellidos + "\nDireccion: " + direccion + "\nTelefono: " + telefono + "\nPuesto: " + puesto ;
+	}
 	/**
 	 * @return the identificador
 	 */

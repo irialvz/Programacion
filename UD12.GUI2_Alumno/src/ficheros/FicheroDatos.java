@@ -67,41 +67,7 @@ public class FicheroDatos {
 		}		
 	}
 	
-	/**
-	 * Escribe un ArrayList en el fichero
-	 * @param ruta
-	 * @param trabajador
-	 */
-	public static void escribirTrabajador(String ruta, Trabajador trabajador){
-		
-		DataOutputStream fichero = null;
-		try {
-			fichero = new DataOutputStream (new FileOutputStream(ruta)); 
-				fichero.writeInt(trabajador.getIdentificador());
-				fichero.writeUTF(trabajador.getDni());
-				fichero.writeUTF(trabajador.getNombre());
-				fichero.writeUTF(trabajador.getApellidos());
-				fichero.writeUTF(trabajador.getDireccion());
-				fichero.writeUTF(trabajador.getTelefono());
-				fichero.writeUTF(trabajador.getPuesto());
-					
-		} 
-		catch (FileNotFoundException e1){
-			System.out.printf("Error al abrir fichero para escritura");
-		}
-		catch (IOException e){ 
-			System.out.printf("Error al escribir en el fichero%n"); 
-		} 
-		finally{ 
-			try{
-			fichero.close();
-			} 
-			catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			}
-		}		
-	}
+
 	/**
 	 * Devuelve un arraylist con los trabajadores del fichero
 	 * @param rutaFichero

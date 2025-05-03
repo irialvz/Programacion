@@ -14,6 +14,8 @@ import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import dao.TablaTrabajadores;
+import excepciones.BDException;
 import modelo.Empresa;
 
 /**
@@ -41,8 +43,13 @@ public class ListarDialog extends JDialog implements ActionListener {
 
 		// Crea un JTable, cada fila será un trabajador
 		String[] columnas = { "Identificador", "DNI", "Nombre", "Apellidos", "Direcci�n", "Tel�fono", "Puesto" };
-		String[][] datos = empresa.listarTrabajadores();
-		tabla = new JTable(datos, columnas);
+		String[][] datos;
+		try {
+			datos = TablaTrabajadores.listarTrabajadores();
+			tabla = new JTable(datos, columnas);
+		} catch (BDException e) {
+			System.err.println(e.getMessage());
+		}
 		// Mete la tabla en un JCrollPane
 		JScrollPane jsp = new JScrollPane(tabla);
 		jsp.setPreferredSize(new Dimension(700, 600));

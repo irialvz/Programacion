@@ -10,11 +10,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import dao.TablaTrabajadores;
 import dialogs.AltaDialog;
 import dialogs.BajaDialog;
 import dialogs.ListarDialog;
 import dialogs.ModificaDialog;
 import dialogs.VerDialog;
+import excepciones.BDException;
 import ficheros.FicheroDatos;
 import modelo.Empresa;
 import modelo.Trabajador;
@@ -40,6 +42,12 @@ public class EmpresaGUI extends JFrame implements ActionListener {
 
 		// Carga los trabajadores leidos de un fichero a memoria
 		ArrayList<Trabajador> trabaj = FicheroDatos.obtenerTrabajadores("ficheroDatos\\empresa.dat");
+		try {
+			TablaTrabajadores.insertarOActualizar(trabaj);
+		} catch (BDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		empresa = new Empresa(trabaj);
 
 		// Tamaño JFrame
@@ -96,13 +104,17 @@ public class EmpresaGUI extends JFrame implements ActionListener {
 		} else if (e.getSource() == modificaTrabajador) {
 			new ModificaDialog(empresa);
 		} else if (e.getSource() == buscaTrabajador) {
-			//new VerDialog(empresa);
+			new VerDialog(empresa);
 		} else if (e.getSource() == listarTrabajadores) {
 			new ListarDialog(empresa);
 		}
 		// Cuando se sale se vuelca a fichero.
 		else if (e.getSource() == salir) {
-			FicheroDatos.escribirTrabajadores("ficheroDatos\\empresa.dat", empresa.getTrabajadores());
+			try {
+				FicheroDatos.escribirTrabajadores("ficheroDatos/empresa.dat",TablaTrabajadores.obtenerTrabajadores());
+			} catch (BDException e1) {
+				System.err.println(e1.getMessage());
+			}
 			System.exit(0);
 		}
 	}

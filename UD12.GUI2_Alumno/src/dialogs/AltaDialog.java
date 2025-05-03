@@ -190,9 +190,8 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 				telefono = areaTelefono.getText();
 				if (comprobarErrores()) {
 					Trabajador t = new Trabajador(id, dni, nombre, apellidos, direccion, telefono, puesto);
-					TablaTrabajadores.insertarOActualizar(t);
-					FicheroDatos.escribirTrabajador("ficheroDatos/empresa.dat", t);
-					if (empresa.altaTrabajador(t)) {
+
+					if (TablaTrabajadores.agregarTrabajador(t)) {
 						JOptionPane.showMessageDialog(null, "Datos introducidos correctamente");
 					} else {
 						JOptionPane.showMessageDialog(null, "El ID del trabajador que quiere introducir ya existe",

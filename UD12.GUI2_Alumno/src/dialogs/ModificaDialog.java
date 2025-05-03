@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -16,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import dao.TablaTrabajadores;
+import excepciones.BDException;
 import modelo.Empresa;
 import modelo.Trabajador;
 
@@ -93,9 +96,17 @@ public class ModificaDialog extends JDialog implements ItemListener, ActionListe
 		pIdentificador.add(etiquetaIdentificador);
 		// lista desplegable
 		comboIdentificador = new JComboBox();
-		comboIdentificador.addItem("1");
-		comboIdentificador.addItem("2");
-		comboIdentificador.addItem("3");
+		ArrayList<Integer> identificadores = new ArrayList<>();
+		try {
+			identificadores = TablaTrabajadores.obtenerIDs();
+			for (int id : identificadores) {
+				comboIdentificador.addItem(id);
+			}
+		} catch (BDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		comboIdentificador.addItemListener(this);
 		pIdentificador.add(comboIdentificador);
 		// Se añaden al JPanel
@@ -205,13 +216,19 @@ public class ModificaDialog extends JDialog implements ItemListener, ActionListe
 	public void actionPerformed(ActionEvent accion) {
 		// TODO Auto-generated method stub
 		if (accion.getSource() == aceptar) {
+			id = (int) comboIdentificador.getSelectedItem();
 			dni = areaDni.getText();
 			nombre= areaNombre.getText();
 			apellidos = areaApellidos.getText();
 			direccion = areaDireccion.getText();
 			telefono = areaTelefono.getText();
 			if (comprobarErrores()) {
-				empresa.modificarTrabajador(id,dni,nombre,apellidos,direccion,telefono,puesto);
+				Trabajador t = new Trabajador(id,dni,nombre,apellidos,direccion,telefono,puesto);
+				try {
+					TablaTrabajadores.modificarTrabajador(t);
+				} catch (BDException e) {
+					System.err.println(e.getMessage());
+				}
 				JOptionPane.showMessageDialog(null,"Trabajador introducido correctamente");
 			}
 		} else if (accion.getSource() == cancelar) {

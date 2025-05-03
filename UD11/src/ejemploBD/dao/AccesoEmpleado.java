@@ -301,7 +301,7 @@ public class AccesoEmpleado {
 	        String query = "UPDATE FROM empleado WHERE codigo = ?";
 
 	        ps = conexion.prepareStatement(query);
-	        ps.setInt(1, codigoEmpleado);
+	        ps.setInt(1, empleado.getCodigo());
 
 	        resultados = ps.executeUpdate();
 	    } catch (SQLException e) {
