@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import dao.TablaTrabajadores;
 import modelo.Empresa;
 
 /**
@@ -80,7 +81,7 @@ public class BajaDialog extends JDialog implements ActionListener {
 			case JOptionPane.YES_OPTION:
 				try {
 					// Operaciones en caso afirmativo
-					if (empresa.bajaTrabajador(Integer.parseInt(areaIdentificador.getText()))) {
+					if (TablaTrabajadores.bajaTrabajador((Integer.parseInt(areaIdentificador.getText())))) {
 						JOptionPane.showMessageDialog(this, "El trabajador se ha eliminado correctamente");
 					} else {
 						JOptionPane.showMessageDialog(null, "El trabajador no se encuentra en la lista", "Error",

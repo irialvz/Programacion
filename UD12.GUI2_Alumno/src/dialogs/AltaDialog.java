@@ -5,6 +5,7 @@ package dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -19,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import dao.TablaTrabajadores;
+import excepciones.BDException;
 import ficheros.FicheroDatos;
 import modelo.Empresa;
 import modelo.Trabajador;
@@ -210,41 +212,73 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 
 	}
 
+	   private static boolean validarDni(String documentoIdentidad) throws BDException {
+	        if (documentoIdentidad.length() != 9) {
+	            throw new BDException("El dni debe tener 9 caracteres");
+	        }
+	        if (documentoIdentidad.isEmpty()) {
+	            throw new BDException("El dni no puede estar vacio");
+	        }
+
+	        for (int i = 0; i < 7; i++) {
+	            char caracter = documentoIdentidad.charAt(i);
+	            if (caracter < '0' || caracter > '9') {
+	                throw new BDException("El dni debe contener contener numeros del 0-9");
+	            }
+	        }
+	        if (documentoIdentidad.charAt(8) < 'A' || documentoIdentidad.charAt(8) > 'Z') {
+	            throw new BDException("El dni debe contener una letra mayuscula");
+	        }
+	        return true;
+
+	    }
 	/**
 	 * M�todo que comprueba si no hay ning�n campo vac�o o si la longitud de los
 	 * campos es la correcta
 	 * 
 	 * @return
+	 * @throws BDException 
+	 * @throws HeadlessException 
 	 */
-	public boolean comprobarErrores() {
-		if (id < 1) {
-			JOptionPane.showMessageDialog(null, "El ID debe ser un n�mero entero positivo", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (dni.equals("") || dni.length() != 9) {
-			JOptionPane.showMessageDialog(null, "El DNI debe tener longitud 9", "Error", JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (nombre.equals("")) {
-			JOptionPane.showMessageDialog(null, "Debe introducir el nombre del trabajador", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (apellidos.equals("")) {
-			JOptionPane.showMessageDialog(null, "Debe introducir los apellidos del trabajador", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (direccion.equals("")) {
-			JOptionPane.showMessageDialog(null, "Debe introducir la direcci�n del trabajador", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (telefono.equals("") || telefono.length() != 9) {
-			JOptionPane.showMessageDialog(null, "El tel�fono debe tener longitud 9", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (puesto.equals("")) {
-			JOptionPane.showMessageDialog(null, "Debe introducir el puesto del trabajador", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
+	public boolean comprobarErrores()  {
+		try {
+			if (id < 1) {
+				JOptionPane.showMessageDialog(null, "El ID debe ser un n�mero entero positivo", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return false;
+				} else if (TablaTrabajadores.existeTrabajador(id)){
+					JOptionPane.showMessageDialog(null, "El ID ya existe en un trabajador", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return false;
+				} else if (!validarDni(dni)) {
+					return false;
+				} else if (nombre.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Debe introducir el nombre del trabajador", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return false;
+				} else if (apellidos.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Debe introducir los apellidos del trabajador", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return false;
+				} else if (direccion.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Debe introducir la direcci�n del trabajador", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return false;
+				} else if (telefono.isEmpty() || telefono.length() != 9) {
+					JOptionPane.showMessageDialog(null, "El tel�fono debe tener longitud 9", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return false;
+				} else if (puesto.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Debe introducir el puesto del trabajador", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return false;
+				}
+			} catch (HeadlessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (BDException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		return true;
 	}
 

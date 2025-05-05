@@ -11,7 +11,7 @@ import excepciones.BDException;
 import modelo.Trabajador;
 
 public class TablaTrabajadores {
-	public static boolean existeTrabajador(Trabajador t) throws BDException {
+	public static boolean existeTrabajador(int identificador) throws BDException {
 		int resultados = 0;
 		PreparedStatement ps = null;
 		Connection conexion = null;
@@ -24,7 +24,7 @@ public class TablaTrabajadores {
 
 				
 				ps = conexion.prepareStatement(query);
-				ps.setInt(1, t.getIdentificador());
+				ps.setInt(1, identificador);
 				resultados = ps.executeUpdate();
 				
 				
@@ -170,6 +170,34 @@ public class TablaTrabajadores {
 		return trabajadores;
 	}
 	
+	
+	
+	public static boolean bajaTrabajador(int identificador) throws BDException {
+		int resultados = 0;
+		PreparedStatement ps = null;
+		Connection conexion = null;
+		
+		// Conexi�n a la bd
+		try {
+			conexion = ConfigSQLite.abrirConexion();
+			String query = "DELETE FROM Trabajadores WHERE id = ?";
+			ps = conexion.prepareStatement(query);
+
+			ps.setInt(1, identificador);
+
+	        resultados = ps.executeUpdate();
+	        	
+	        
+		} catch (BDException | SQLException e) {
+			// TODO Auto-generated catch block
+			System.err.println(e.getMessage());
+		}finally {
+			if (conexion != null) {
+				ConfigSQLite.cerrarConexion(conexion);
+			}
+		}
+		return resultados == 1;
+	}
 	/**
 	 * Modifica los parametros de un trabajador segun su ID
 	 * @param Trabajador
