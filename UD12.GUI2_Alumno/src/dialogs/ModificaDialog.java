@@ -172,10 +172,17 @@ public class ModificaDialog extends JDialog implements ItemListener, ActionListe
 		// lista desplegable
 		comboPuesto = new JComboBox();
 		comboPuesto.addItem("Elija Puesto");
-		comboPuesto.addItem("Programador");
-		comboPuesto.addItem("Analista");
-		comboPuesto.addItem("Arquitecto");
-		comboPuesto.addItem("Jefe de Proyecto");
+		ArrayList<String> puestosDisponibles;
+		try {
+			puestosDisponibles = TablaTrabajadores.obtenerPuestos();
+			for (String puesto : puestosDisponibles) {
+				comboPuesto.addItem(puesto);
+
+			}
+		} catch (BDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		comboPuesto.addItemListener(this);
 		pPuesto.add(comboPuesto);
 		

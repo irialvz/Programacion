@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import dao.TablaTrabajadores;
 import dialogs.AltaDialog;
 import dialogs.BajaDialog;
+import dialogs.BajaDialogNEW;
 import dialogs.ListarDialog;
 import dialogs.ModificaDialog;
 import dialogs.VerDialog;
@@ -100,7 +101,7 @@ public class EmpresaGUI extends JFrame implements ActionListener {
 		if (e.getSource() == altaTrabajador) {
 			new AltaDialog(empresa);
 		} else if (e.getSource() == bajaTrabajador) {
-			new BajaDialog(empresa);
+			new BajaDialogNEW(empresa);
 		} else if (e.getSource() == modificaTrabajador) {
 			new ModificaDialog(empresa);
 		} else if (e.getSource() == buscaTrabajador) {

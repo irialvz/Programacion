@@ -251,18 +251,17 @@ public class TablaTrabajadores {
 		// Conexi�n a la bd
 		try {
 			conexion = ConfigSQLite.abrirConexion();
-			String query = "INSERT INTO Trabajadores "
-					+ "VALUES(?,?,?,?,?,?,?) ";
+			String query = "INSERT INTO Trabajadores (dni,nombre,apellidos,direccion,telefono,puesto)"
+					+ "VALUES(?,?,?,?,?,?) ";
 
 			
 	        ps = conexion.prepareStatement(query);
-	        ps.setInt(1, t.getIdentificador());
-	        ps.setString(2, t.getDni());
-	        ps.setString(3, t.getNombre());
-	        ps.setString(4, t.getApellidos());
-	        ps.setString(5, t.getDireccion());
-	        ps.setString(6, t.getTelefono());
-	        ps.setString(7, t.getTelefono());
+	        ps.setString(1, t.getDni());
+	        ps.setString(2, t.getNombre());
+	        ps.setString(3, t.getApellidos());
+	        ps.setString(4, t.getDireccion());
+	        ps.setString(5, t.getTelefono());
+	        ps.setString(6, t.getPuesto());
 
 
 	        resultados = ps.executeUpdate();
@@ -335,6 +334,35 @@ public class TablaTrabajadores {
 				}
 			}
 		return ids;
+	}
+	
+	public static ArrayList<String> obtenerPuestos () throws BDException {
+		ArrayList<String> puestos = new ArrayList<>();
+		PreparedStatement ps = null;
+		Connection conexion = null;
+
+		
+			// Conexi�n a la bd
+			try {
+				conexion = ConfigSQLite.abrirConexion();
+				String query = "SELECT DISTINCT puesto FROM Trabajadores";
+
+				
+		        ps = conexion.prepareStatement(query);
+		        ResultSet resultados = ps.executeQuery();
+		        while (resultados.next()) {
+		        	String puesto = resultados.getString("puesto");
+		        	puestos.add(puesto);
+		        }
+			} catch (BDException | SQLException e) {
+				// TODO Auto-generated catch block
+				System.err.println(e.getMessage());
+			}finally {
+				if (conexion != null) {
+					ConfigSQLite.cerrarConexion(conexion);
+				}
+			}
+		return puestos;
 	}
 	
 	public static Trabajador obtenerTrabajador (int identificador) throws BDException {
