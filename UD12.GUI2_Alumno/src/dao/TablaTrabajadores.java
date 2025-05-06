@@ -336,8 +336,9 @@ public class TablaTrabajadores {
 		return ids;
 	}
 	
-	public static ArrayList<String> obtenerPuestos () throws BDException {
-		ArrayList<String> puestos = new ArrayList<>();
+	public static String[] obtenerPuestos () throws BDException {
+		String[] puestos = new String[4];
+		int vuelta = 0;
 		PreparedStatement ps = null;
 		Connection conexion = null;
 
@@ -345,14 +346,15 @@ public class TablaTrabajadores {
 			// Conexi�n a la bd
 			try {
 				conexion = ConfigSQLite.abrirConexion();
-				String query = "SELECT DISTINCT puesto FROM Trabajadores";
+				String query = "SELECT * FROM puestos";
 
 				
 		        ps = conexion.prepareStatement(query);
 		        ResultSet resultados = ps.executeQuery();
 		        while (resultados.next()) {
-		        	String puesto = resultados.getString("puesto");
-		        	puestos.add(puesto);
+		        	String puesto = resultados.getString("nombre");
+		        	puestos[vuelta] = puesto;
+		        	vuelta++;
 		        }
 			} catch (BDException | SQLException e) {
 				// TODO Auto-generated catch block

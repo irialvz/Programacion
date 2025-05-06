@@ -142,7 +142,7 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 		// lista desplegable
 		comboPuesto = new JComboBox();
 		comboPuesto.addItem("Elija Puesto");
-		ArrayList<String> puestosDisponibles;
+		String[] puestosDisponibles;
 		try {
 			puestosDisponibles = TablaTrabajadores.obtenerPuestos();
 			for (String puesto : puestosDisponibles) {

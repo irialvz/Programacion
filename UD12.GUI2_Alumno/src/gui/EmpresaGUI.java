@@ -13,8 +13,9 @@ import javax.swing.JFrame;
 import dao.TablaTrabajadores;
 import dialogs.AltaDialog;
 import dialogs.BajaDialog;
-import dialogs.BajaDialogNEW;
+import dialogs.BajaDialog;
 import dialogs.ListarDialog;
+import dialogs.ModificaDialog;
 import dialogs.ModificaDialog;
 import dialogs.VerDialog;
 import excepciones.BDException;
@@ -101,7 +102,7 @@ public class EmpresaGUI extends JFrame implements ActionListener {
 		if (e.getSource() == altaTrabajador) {
 			new AltaDialog(empresa);
 		} else if (e.getSource() == bajaTrabajador) {
-			new BajaDialogNEW(empresa);
+			new BajaDialog(empresa);
 		} else if (e.getSource() == modificaTrabajador) {
 			new ModificaDialog(empresa);
 		} else if (e.getSource() == buscaTrabajador) {

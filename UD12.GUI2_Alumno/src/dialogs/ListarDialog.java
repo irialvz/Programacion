@@ -13,6 +13,8 @@ import javax.swing.JDialog;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import dao.TablaTrabajadores;
 import excepciones.BDException;
@@ -50,6 +52,8 @@ public class ListarDialog extends JDialog implements ActionListener {
 		} catch (BDException e) {
 			System.err.println(e.getMessage());
 		}
+		TableRowSorter<TableModel> ordenar = new TableRowSorter<>(tabla.getModel());
+		tabla.setRowSorter(ordenar);
 		// Mete la tabla en un JCrollPane
 		JScrollPane jsp = new JScrollPane(tabla);
 		jsp.setPreferredSize(new Dimension(700, 600));
