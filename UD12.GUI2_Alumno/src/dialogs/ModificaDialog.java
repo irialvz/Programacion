@@ -102,6 +102,7 @@ public class ModificaDialog extends JDialog implements ItemListener, ActionListe
 		modificar = new JButton("Modificar");
 		modificar.addActionListener(this);
 		add(modificar);
+		
 
 		setVisible(true);
 	}

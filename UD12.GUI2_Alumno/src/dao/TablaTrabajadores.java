@@ -1,5 +1,9 @@
 package dao;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -403,5 +407,34 @@ public class TablaTrabajadores {
 				}
 			}
 		return t;
+	}
+	public static boolean exportarFicheroCSV(String nombreFichero, ArrayList<Trabajador> Trabajadores){
+		boolean existoso = false;
+		BufferedWriter bw = null;
+		try {
+			File fichero = new File(nombreFichero);
+			bw = new BufferedWriter(new FileWriter(fichero, false));
+			for (Trabajador trabajador : Trabajadores) {				
+				bw.write(trabajador.toString());
+				bw.newLine();
+				existoso=true;
+			}
+		} 
+		catch(IOException ioe) {
+			System.out.println("Error al escribir en el fichero: " + ioe.getMessage());
+			ioe.printStackTrace();
+		}
+		finally {
+			try {
+				if (bw != null) {
+					bw.close();
+				}
+			}
+			catch (IOException ioe) {
+				System.out.println("Error al cerrar el fichero: " + ioe.getMessage());
+				ioe.printStackTrace();
+			}
+		}
+		return existoso;
 	}
 }

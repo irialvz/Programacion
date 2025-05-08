@@ -7,10 +7,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
@@ -19,6 +20,7 @@ import javax.swing.table.TableRowSorter;
 import dao.TablaTrabajadores;
 import excepciones.BDException;
 import modelo.Empresa;
+import modelo.Trabajador;
 
 /**
  * 
@@ -30,6 +32,8 @@ public class ListarDialog extends JDialog implements ActionListener {
 	Empresa empresa;
 	JTable tabla;
 	JButton cerrar;
+	JButton csv;
+	ArrayList<Trabajador> listaTrabajadores;
 
 	public ListarDialog(Empresa empresa) {
 		this.empresa = empresa;
@@ -62,7 +66,10 @@ public class ListarDialog extends JDialog implements ActionListener {
 		cerrar = new JButton("Cerrar");
 		cerrar.addActionListener(this);
 		add(cerrar);
-
+		
+		csv = new JButton("Exportar a csv");
+		csv.addActionListener(this);
+		add(csv);
 		setVisible(true);
 	}
 
@@ -71,6 +78,16 @@ public class ListarDialog extends JDialog implements ActionListener {
 		// TODO Auto-generated method stub
 		if (e.getSource() == cerrar) {
 			dispose();
+		} else if (e.getSource() == csv) {
+			try {
+				listaTrabajadores = TablaTrabajadores.obtenerTrabajadores();
+				if (TablaTrabajadores.exportarFicheroCSV("trabajadores", listaTrabajadores)) {
+					JOptionPane.showMessageDialog(this, "Se ha generado correctamente");
+					dispose();
+				}
+			} catch (BDException ex) {
+				System.err.println(ex.getMessage());
+			}
 		}
 	}
 
