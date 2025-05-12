@@ -11,9 +11,14 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -33,8 +38,14 @@ public class ListarDialog extends JDialog implements ActionListener {
 	JTable tabla;
 	JButton cerrar;
 	JButton csv;
+	JTextField busqueda;
+	JScrollPane jsp;
+	JLabel text;
 	ArrayList<Trabajador> listaTrabajadores;
+	TableRowSorter<TableModel> barraBusqueda;
 
+	String texto = "";
+	String[][] datos;
 	public ListarDialog(Empresa empresa) {
 		this.empresa = empresa;
 
@@ -49,17 +60,44 @@ public class ListarDialog extends JDialog implements ActionListener {
 
 		// Crea un JTable, cada fila será un trabajador
 		String[] columnas = { "Identificador", "DNI", "Nombre", "Apellidos", "Direcci�n", "Tel�fono", "Puesto" };
-		String[][] datos;
 		try {
 			datos = TablaTrabajadores.listarTrabajadores();
 			tabla = new JTable(datos, columnas);
 		} catch (BDException e) {
 			System.err.println(e.getMessage());
 		}
-		TableRowSorter<TableModel> ordenar = new TableRowSorter<>(tabla.getModel());
-		tabla.setRowSorter(ordenar);
+		
+		text = new JLabel("<html>Barra busqueda:</html>");
+		add(text);
+		busqueda = new JTextField(20);
+		add(busqueda);
+		
+		barraBusqueda = new TableRowSorter<>(tabla.getModel());
+		tabla.setRowSorter(barraBusqueda);
+		
+		busqueda.getDocument().addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) { filtrar();}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) { filtrar();}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {filtrar();}
+			
+			private void filtrar() {
+				texto = busqueda.getText();
+				if (texto.trim().length() == 0) {
+					barraBusqueda.setRowFilter(null);
+				}else {
+					barraBusqueda.setRowFilter(RowFilter.regexFilter("(?i)" + texto));
+				}
+			}
+			
+		});
 		// Mete la tabla en un JCrollPane
-		JScrollPane jsp = new JScrollPane(tabla);
+		jsp = new JScrollPane(tabla);
 		jsp.setPreferredSize(new Dimension(700, 600));
 		add(jsp);
 
@@ -90,5 +128,6 @@ public class ListarDialog extends JDialog implements ActionListener {
 			}
 		}
 	}
+
 
 }
