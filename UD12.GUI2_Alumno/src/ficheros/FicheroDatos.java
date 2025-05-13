@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import modelo.Trabajador;
 
 /**
@@ -93,20 +95,22 @@ public class FicheroDatos {
 			}			
 		}
 		catch (EOFException e){
-			
+
 		} 
 		catch (FileNotFoundException e){
-			e.printStackTrace();
-		} 
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+					JOptionPane.ERROR_MESSAGE);		
+			} 
 		catch (IOException e) {
-			e.printStackTrace();
-		}
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+					JOptionPane.ERROR_MESSAGE);		}
 		finally{
 			try {
 				ficheroDatos.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);
 			} 
 		}
 		

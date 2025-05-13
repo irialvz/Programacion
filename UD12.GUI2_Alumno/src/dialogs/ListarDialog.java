@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -38,11 +39,15 @@ public class ListarDialog extends JDialog implements ActionListener {
 	JTable tabla;
 	JButton cerrar;
 	JButton csv;
+	JButton json;
 	JTextField busqueda;
 	JScrollPane jsp;
 	JLabel text;
 	ArrayList<Trabajador> listaTrabajadores;
 	TableRowSorter<TableModel> barraBusqueda;
+	JFileChooser ficheroSeleccionado; 
+	String ruta = "";
+	int resultado = 0;
 
 	String texto = "";
 	String[][] datos;
@@ -53,7 +58,7 @@ public class ListarDialog extends JDialog implements ActionListener {
 		// t�tulo del di�log
 		setTitle("Listado Trabajadores");
 		// tama�o
-		setSize(750, 700);
+		setSize(750, 720);
 		setLayout(new FlowLayout());
 		// colocaci�n en el centro de la pantalla
 		setLocationRelativeTo(null);
@@ -76,7 +81,7 @@ public class ListarDialog extends JDialog implements ActionListener {
 		tabla.setRowSorter(barraBusqueda);
 		
 		busqueda.getDocument().addDocumentListener(new DocumentListener() {
-
+			
 			@Override
 			public void insertUpdate(DocumentEvent e) { filtrar();}
 
@@ -109,6 +114,13 @@ public class ListarDialog extends JDialog implements ActionListener {
 		csv.addActionListener(this);
 		add(csv);
 		setVisible(true);
+		
+		json = new JButton("Exportar a JSON");
+		json.addActionListener(this);
+		add(json);
+		
+		ficheroSeleccionado = new JFileChooser();
+		setVisible(true);
 	}
 
 	@Override
@@ -117,15 +129,34 @@ public class ListarDialog extends JDialog implements ActionListener {
 		if (e.getSource() == cerrar) {
 			dispose();
 		} else if (e.getSource() == csv) {
+			resultado = ficheroSeleccionado.showSaveDialog(this);
+			if (resultado == JFileChooser.APPROVE_OPTION) {
+				ruta = ficheroSeleccionado.getSelectedFile().getAbsolutePath();
+			}
 			try {
 				listaTrabajadores = TablaTrabajadores.obtenerTrabajadores();
-				if (TablaTrabajadores.exportarFicheroCSV("trabajadores", listaTrabajadores)) {
+				if (TablaTrabajadores.exportarFicheroCSV(ruta, listaTrabajadores)) {
 					JOptionPane.showMessageDialog(this, "Se ha generado correctamente");
 					dispose();
 				}
 			} catch (BDException ex) {
-				System.err.println(ex.getMessage());
+				JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);			}
+		} else if (e.getSource() == json) {
+			resultado = ficheroSeleccionado.showSaveDialog(this);
+			if (resultado == JFileChooser.APPROVE_OPTION) {
+				ruta = ficheroSeleccionado.getSelectedFile().getAbsolutePath();
 			}
+			try {
+				listaTrabajadores = TablaTrabajadores.obtenerTrabajadores();
+				if (TablaTrabajadores.exportarFicheroJson(ruta, listaTrabajadores)) {
+					JOptionPane.showMessageDialog(this, "Se ha generado correctamente");
+					dispose();
+				}
+			} catch (BDException ex) {
+				JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);			}
+			
 		}
 	}
 

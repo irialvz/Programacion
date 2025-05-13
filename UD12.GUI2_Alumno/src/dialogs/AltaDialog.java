@@ -94,12 +94,6 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 		pPuesto = new JPanel();
 		pBotones = new JPanel();
 
-		// Se crean los elementos y se añaden
-		//etiquetaIdentificador = new JLabel("Identificador");
-		//areaIdentificador = new JTextField(15);
-		// Se añaden al JPanel
-		//pIdentificador.add(etiquetaIdentificador);
-		//pIdentificador.add(areaIdentificador);
 
 		// Se crean los elementos y se añaden
 		etiquetaDni = new JLabel("DNI                 ");
@@ -207,8 +201,9 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 					} else {
 						JOptionPane.showMessageDialog(null, "El ID del trabajador que quiere introducir ya existe",
 								"Error", JOptionPane.ERROR_MESSAGE);
+						dispose();
 					}
-				}
+				} 
 
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, "El ID debe ser un n�mero entero", "Error",
@@ -251,15 +246,7 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 	 */
 	public boolean comprobarErrores()  {
 		try {
-			/*if (id < 1) {
-				JOptionPane.showMessageDialog(null, "El ID debe ser un n�mero entero positivo", "Error",
-						JOptionPane.ERROR_MESSAGE);
-				return false;
-				} else if (TablaTrabajadores.existeTrabajador(id)){
-					JOptionPane.showMessageDialog(null, "El ID ya existe en un trabajador", "Error",
-							JOptionPane.ERROR_MESSAGE);
-					return false;
-				} else */if (!validarDni(dni)) {
+			if (!validarDni(dni)) {
 					return false;
 				} else if (nombre.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Debe introducir el nombre del trabajador", "Error",
@@ -277,16 +264,19 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 					JOptionPane.showMessageDialog(null, "El tel�fono debe tener longitud 9", "Error",
 							JOptionPane.ERROR_MESSAGE);
 					return false;
-				} else if (puesto.isEmpty()) {
+				} else if (puesto.isEmpty() || puesto.equalsIgnoreCase("Elija Puesto")) {
 					JOptionPane.showMessageDialog(null, "Debe introducir el puesto del trabajador", "Error",
 							JOptionPane.ERROR_MESSAGE);
 					return false;
 				}
 			} catch (HeadlessException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return false;
 			} catch (BDException e) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				return false;
 			}
 		return true;
 	}

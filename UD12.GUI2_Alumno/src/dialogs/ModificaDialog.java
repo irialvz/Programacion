@@ -119,6 +119,10 @@ public class ModificaDialog extends JDialog implements ItemListener, ActionListe
 		if (accion.getSource() == modificar) {
 			int filaSeleccionada = tabla.getSelectedRow();
 			if(filaSeleccionada != -1) {
+				
+				 if (tabla.isEditing()) { //comprueba si algun campo esta en modo edicion
+			            tabla.getCellEditor().stopCellEditing(); //para la edicion y guarda el nuevo valor
+			        }
 				String filaID = tabla.getValueAt(filaSeleccionada, 0).toString();
 				int idTrabajador = Integer.parseInt(filaID);
 				String dniTrabajador = tabla.getValueAt(filaSeleccionada, 1).toString();
@@ -126,7 +130,8 @@ public class ModificaDialog extends JDialog implements ItemListener, ActionListe
 				String apellidoTrabajador = tabla.getValueAt(filaSeleccionada, 3).toString();
 				String direccionTrabajador = tabla.getValueAt(filaSeleccionada, 4).toString();
 				String telefonoTrabajador = tabla.getValueAt(filaSeleccionada, 5).toString();
-				String puestoTrabajador = (String) comboPuestos.getSelectedItem();
+				String puestoTrabajador = tabla.getValueAt(filaSeleccionada, 6).toString();
+
 				Trabajador editTrabajador = new Trabajador(idTrabajador,dniTrabajador,nombreTrabajador,apellidoTrabajador,direccionTrabajador,telefonoTrabajador,puestoTrabajador);
 				int respuesta = JOptionPane.showConfirmDialog(null, "Desea modificar el trabajador?", "Modificar", JOptionPane.YES_NO_OPTION);
 				switch(respuesta) {
@@ -141,8 +146,8 @@ public class ModificaDialog extends JDialog implements ItemListener, ActionListe
 						}
 					} catch (BDException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+						JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+								JOptionPane.ERROR_MESSAGE);					}
 				}
 			}
 		} else if (accion.getSource() == cerrar) {

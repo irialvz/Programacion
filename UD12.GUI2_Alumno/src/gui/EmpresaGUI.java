@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import dao.TablaTrabajadores;
 import dialogs.AltaDialog;
@@ -44,11 +45,12 @@ public class EmpresaGUI extends JFrame implements ActionListener {
 
 		// Carga los trabajadores leidos de un fichero a memoria
 		ArrayList<Trabajador> trabaj = FicheroDatos.obtenerTrabajadores("ficheroDatos\\empresa.dat");
+		
 		try {
 			TablaTrabajadores.insertarOActualizar(trabaj);
 		} catch (BDException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+					JOptionPane.ERROR_MESSAGE);
 		}
 		empresa = new Empresa(trabaj);
 
@@ -115,7 +117,8 @@ public class EmpresaGUI extends JFrame implements ActionListener {
 			try {
 				FicheroDatos.escribirTrabajadores("ficheroDatos/empresa.dat",TablaTrabajadores.obtenerTrabajadores());
 			} catch (BDException e1) {
-				System.err.println(e1.getMessage());
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 			System.exit(0);
 		}
