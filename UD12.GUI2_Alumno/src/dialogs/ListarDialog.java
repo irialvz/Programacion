@@ -155,7 +155,8 @@ public class ListarDialog extends JDialog implements ActionListener {
 				}
 			} catch (BDException ex) {
 				JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
-						JOptionPane.ERROR_MESSAGE);			}
+						JOptionPane.ERROR_MESSAGE);			
+				}
 			
 		}
 	}
