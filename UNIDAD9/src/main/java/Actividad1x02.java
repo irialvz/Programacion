@@ -24,14 +24,18 @@ public class Actividad1x02 {
         try {
             System.out.println("Nombre de fichero?");
             String nombreTxt = teclado.nextLine();
+            
             File fichero = new File(nombreTxt);
             if (fichero.exists()) {
+
                 FileReader fichLec = new FileReader(fichero);
                 int c = fichLec.read();
                 while (c != -1) {
                     contadorCaracteres++;
-                    fichLec.read();
+                    c = fichLec.read();
+
                 }
+                System.out.println("el archivo tiene " + contadorCaracteres + " caracteres");
 
             } else if (!fichero.exists()) {
                 throw new Exception("El archivo no existe en el sistema");

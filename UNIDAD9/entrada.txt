@@ -1,0 +1,5 @@
+Este es el principio
+Hola
+Este es un fichero de texto
+Adios
+Este es el fin
