@@ -114,7 +114,79 @@ public static ArrayList<Alumno> importarFicheroAlumnos(String nombreFichero){
 		
 		return alumnosMinimaNota;	
 	}
+    public static void eliminarEmpleadoPorDNI(String dniAEliminar, String rutaArchivo) {
+        File archivoOriginal = new File(rutaArchivo);
+        File archivoTemporal = new File("temporal.txt");
 
+        try  {
+        	BufferedReader lector = new BufferedReader(new FileReader(archivoOriginal));
+            BufferedWriter escritor = new BufferedWriter(new FileWriter(archivoTemporal));
+            String linea;
+
+            while ((linea = lector.readLine()) != null) {
+                if (!linea.contains(dniAEliminar)) {
+                    escritor.write(linea);
+                    escritor.newLine();
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al procesar el archivo: " + e.getMessage());
+            return;
+        }
+
+        // Reemplazar el archivo original con el temporal
+        if (archivoOriginal.delete()) {
+            if (!archivoTemporal.renameTo(archivoOriginal)) {
+                System.out.println("No se pudo renombrar el archivo temporal.");
+            }
+        } else {
+            System.out.println("No se pudo eliminar el archivo original.");
+        }
+    }
+
+    public static void eliminarEmpleadosMenoresDe50(String rutaArchivo) {
+        File archivoOriginal = new File(rutaArchivo);
+        File archivoTemporal = new File("temporal.txt");
+
+        try {
+
+            BufferedReader lector = new BufferedReader(new FileReader(archivoOriginal));
+            BufferedWriter escritor = new BufferedWriter(new FileWriter(archivoTemporal));
+            String linea;
+
+            while ((linea = lector.readLine()) != null) {
+                String[] partes = linea.split(";");
+                if (partes.length >= 3) {
+                    try {
+                        int edad = Integer.parseInt(partes[2].trim());
+                        if (edad >= 50) {
+                            escritor.write(linea);
+                            escritor.newLine();
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Edad no válida en la línea: " + linea);
+                        // Si hay un error, puedes decidir mantener la línea o no
+                    }
+                } else {
+                    System.out.println("Formato incorrecto en la línea: " + linea);
+                    // Puedes decidir si guardarla igual:
+                    // escritor.write(linea); escritor.newLine();
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al procesar el archivo: " + e.getMessage());
+            return;
+        }
+
+        // Reemplazar el archivo original con el temporal
+        if (archivoOriginal.delete()) {
+            if (!archivoTemporal.renameTo(archivoOriginal)) {
+                System.out.println("No se pudo renombrar el archivo temporal.");
+            }
+        } else {
+            System.out.println("No se pudo eliminar el archivo original.");
+        }
+    }
 	/* LEER FICHERO MAIN
 	 * BufferedReader br = null;
 		try {
