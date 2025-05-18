@@ -37,7 +37,7 @@ public class Clase {
 	public String toString() {
 		return "Clase [Código = " + this.codigo + ", Nombre = " + this.nombre + ", ConsumoMínimoAnual = "
 				+ String.format("%.2f", this.consumoMinimoAnual) + ", PorcentajeAdicional = "
-				+ String.format("%.1f", this.porcentajeAdicional) + "]";
+				+ String.format("%.1f", this.porcentajeAdicional) + "]\n";
 	}
 
 	

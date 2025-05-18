@@ -1,0 +1,40 @@
+{
+	"trabajadores": [
+		{
+			"identificador":"1",
+			"dni":"96874532P",
+			"nombre":"JuanJuan",
+			"apellidos":"Pasamar",
+			"direccion":"Casetas",
+			"telefono":"789451263",
+			"puesto":"Programador"
+		}
+		{
+			"identificador":"2",
+			"dni":"12987541P",
+			"nombre":"Daniel",
+			"apellidos":"Gracia",
+			"direccion":"Valde",
+			"telefono":"789436250",
+			"puesto":"Jefe de Proyecto"
+		}
+		{
+			"identificador":"221",
+			"dni":"12381196W",
+			"nombre":"Manuel",
+			"apellidos":"Gutierrez",
+			"direccion":"pamplona",
+			"telefono":"684110355",
+			"puesto":"Analista"
+		}
+		{
+			"identificador":"310",
+			"dni":"12381193V",
+			"nombre":"Iria",
+			"apellidos":"Alvarez",
+			"direccion":"Calle Collarada",
+			"telefono":"680554776",
+			"puesto":"Analista"
+		}
+	]
+}

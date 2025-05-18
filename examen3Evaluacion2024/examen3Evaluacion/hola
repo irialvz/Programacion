@@ -1,0 +1,5 @@
+Clase [Código = 1, Nombre = Bronce, ConsumoMínimoAnual = 300,00, PorcentajeAdicional = 10,0]
+Clase [Código = 2, Nombre = Plata, ConsumoMínimoAnual = 1000,00, PorcentajeAdicional = 25,0]
+Clase [Código = 3, Nombre = Oro, ConsumoMínimoAnual = 3000,00, PorcentajeAdicional = 50,0]
+Clase [Código = 4, Nombre = Platino, ConsumoMínimoAnual = 10000,00, PorcentajeAdicional = 75,0]
+
