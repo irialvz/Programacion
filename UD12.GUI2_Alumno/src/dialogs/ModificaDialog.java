@@ -1,6 +1,7 @@
 package dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,233 +9,150 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableRowSorter;
+import javax.swing.table.TableModel;
 
 import dao.TablaTrabajadores;
 import excepciones.BDException;
 import modelo.Empresa;
 import modelo.Trabajador;
 
+
 public class ModificaDialog extends JDialog implements ItemListener, ActionListener {
-
 	/**
-	 * Elementos del JFrame
-	 */
-	
-	JLabel etiquetaIdentificador;
-	JComboBox comboIdentificador;
-	
-	JLabel etiquetaDni;
-	JTextField areaDni;
-	JLabel etiquetaNombre;
-	JTextField areaNombre;
-	JLabel etiquetaApellidos;
-	JTextField areaApellidos;
-	JLabel etiquetaDireccion;
-	JTextField areaDireccion;
-	JLabel etiquetaTelefono;
-	JTextField areaTelefono;
-	JLabel etiquetaPuesto;
-	JComboBox comboPuesto;
-	JButton aceptar;
-	JButton cancelar;
-	/**
-	 * Variables a las que se pasar� el contenido de los JTextField y del combo box
-	 */
-	int id = 0;
-	String dni = "";
-	String nombre = "";
-	String apellidos = "";
-	String direccion = "";
-	String telefono = "";
-	String puesto = "";
+	 * 
+	 */	JButton aceptar;
+		JButton cancelar;
+		JPanel panel;
+		JPanel panelBotones;
+		JLabel texto;
 
-	JPanel pIdentificador;
-	JPanel pDni;
-	JPanel pNombre;
-	JPanel pApellidos;
-	JPanel pDireccion;
-	JPanel pTelefono;
-	JPanel pPuesto;
-	JPanel pBotones;
-	
-	Empresa empresa;
-	
-	public ModificaDialog(Empresa empresa) {
-		this.empresa = empresa;
-		setResizable(false);
-		// t�tulo del di�log
-		setTitle("Modificar Trabajador");
-		setSize(300, 350);
-		setLayout(new FlowLayout());
-
-		setLocationRelativeTo(null);
-
-		// una fila por JPanel
-		pIdentificador = new JPanel();
-		pDni = new JPanel();
-		pNombre = new JPanel();
-		pApellidos = new JPanel();
-		pDireccion = new JPanel();
-		pTelefono = new JPanel();
-		pPuesto = new JPanel();
-		pBotones = new JPanel();
-		
+		Empresa empresa;
+		JTable tabla;
+		JButton cerrar;
+		JButton modificar;
+		JComboBox<String> comboPuestos;
+		TableColumn columnaPuesto;
 		
 		/**
-		 * BOTON IDENTIFICADOR
+		 * Variables a las que se pasar� el contenido de los JTextField y del combo box
 		 */
-		// Se crean los elementos y se añaden
-		etiquetaIdentificador = new JLabel("Identificador                         ");
-		pIdentificador.add(etiquetaIdentificador);
-		// lista desplegable
-		comboIdentificador = new JComboBox();
-		ArrayList<Integer> identificadores = new ArrayList<>();
+		//int id = 0;
+		String dni = "";
+		String nombre = "";
+		String apellidos = "";
+		String direccion = "";
+		String telefono = "";
+		String puesto = "";
+		private static final long serialVersionUID = 1L;
+
+	public ModificaDialog(Empresa empresa) {
+		this.empresa = empresa;
+
+		setResizable(false);
+		// t�tulo del di�log
+		setTitle("Modifica Trabajadores");
+		// tama�o
+		setSize(750, 700);
+		setLayout(new FlowLayout());
+		// colocaci�n en el centro de la pantalla
+		setLocationRelativeTo(null);
+
+		// Crea un JTable, cada fila será un trabajador
+		String[] columnas = { "Identificador", "DNI", "Nombre", "Apellidos", "Direcci�n", "Tel�fono", "Puesto" };
+		String[][] datos;
 		try {
-			identificadores = TablaTrabajadores.obtenerIDs();
-			for (int id : identificadores) {
-				comboIdentificador.addItem(id);
-			}
+			String[] puestosDisponibles = TablaTrabajadores.obtenerPuestos();
+			comboPuestos = new JComboBox<>(puestosDisponibles);
+
 		} catch (BDException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		try {
+			datos = TablaTrabajadores.listarTrabajadores();
+			tabla = new JTable(datos, columnas);
+			columnaPuesto = tabla.getColumnModel().getColumn(6);
+			columnaPuesto.setCellEditor(new DefaultCellEditor(comboPuestos));
+		} catch (BDException e) {
+			System.err.println(e.getMessage());
+		}
 
-		comboIdentificador.addItemListener(this);
-		pIdentificador.add(comboIdentificador);
-		// Se añaden al JPanel
-		pIdentificador.add(etiquetaIdentificador);
-		pIdentificador.add(comboIdentificador);
+		// Mete la tabla en un JCrollPane
+		JScrollPane jsp = new JScrollPane(tabla);
+		jsp.setPreferredSize(new Dimension(700, 600));
+		add(jsp);
 
-		/**
-		 * BOTON DNI
-		 */
-		// Se crean los elementos y se añaden
-		etiquetaDni = new JLabel("DNI                 ");
-		areaDni = new JTextField(15);
-		// Se añaden al JPanel
-		pDni.add(etiquetaDni);
-		pDni.add(areaDni);
+		cerrar = new JButton("Cerrar");
+		cerrar.addActionListener(this);
+		add(cerrar);
 
-		/**
-		 * BOTON NOMBRE
-		 */
-		// Se crean los elementos y se añaden
-		etiquetaNombre = new JLabel("Nombre         ");
-		areaNombre = new JTextField(15);
-		// Se añaden al JPanel
-		pNombre.add(etiquetaNombre);
-		pNombre.add(areaNombre);
-
-		/**
-		 * BOTON APELLIDOS
-		 */
-		// Se crean los elementos y se a�aden
-		etiquetaApellidos = new JLabel("Apellidos      ");
-		areaApellidos = new JTextField(15);
-		// Se añaden al JPanel
-		pApellidos.add(etiquetaApellidos);
-		pApellidos.add(areaApellidos);
-
-		/**
-		 * BOTON DIRECCION
-		 */
-		// Se crean los elementos y se añaden
-		etiquetaDireccion = new JLabel("Direccion      ");
-		areaDireccion = new JTextField(15);
-		// Se añaden al JPanel
-		pDireccion.add(etiquetaDireccion);
-		pDireccion.add(areaDireccion);
-
-		/**
-		 * BOTON TELEFONO
-		 */
-		// Se crean los elementos y se a�aden
-		etiquetaTelefono = new JLabel("Telefono       ");
-		areaTelefono = new JTextField(15);
-		// Se añaden al JPanel
-		pTelefono.add(etiquetaTelefono);
-		pTelefono.add(areaTelefono);
-
-		/**
-		 * DESPLEGABLE DE PUESTO
-		 */
-		// Se crean los elementos y se añaden
-		etiquetaPuesto = new JLabel("Puesto                         ");
-		pPuesto.add(etiquetaPuesto);
-		// lista desplegable
-		comboPuesto = new JComboBox();
-		comboPuesto.addItem("Elija Puesto");
-		comboPuesto.addItem("Programador");
-		comboPuesto.addItem("Analista");
-		comboPuesto.addItem("Arquitecto");
-		comboPuesto.addItem("Jefe de Proyecto");
-		comboPuesto.addItemListener(this);
-		pPuesto.add(comboPuesto);
+		modificar = new JButton("Modificar");
+		modificar.addActionListener(this);
+		add(modificar);
 		
-		// Añadir al JDialog los JPanel
-		add(pIdentificador);
-		add(pDni);
-		add(pNombre);
-		add(pApellidos);
-		add(pDireccion);
-		add(pTelefono);
-		add(pPuesto);
 
-		aceptar = new JButton("Aceptar");
-		aceptar.addActionListener(this);
-		pBotones.add(aceptar);
-
-		cancelar = new JButton("Cancelar");
-		cancelar.addActionListener(this);
-		pBotones.add(cancelar);
-
-		add(pBotones);
-
-		// Visible
 		setVisible(true);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-	
 	}
+	
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
-		puesto = comboPuesto.getSelectedItem().toString();
-		id = comboIdentificador.getSelectedIndex();
+
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent accion) {
-		// TODO Auto-generated method stub
-		if (accion.getSource() == aceptar) {
-			id = (int) comboIdentificador.getSelectedItem();
-			dni = areaDni.getText();
-			nombre= areaNombre.getText();
-			apellidos = areaApellidos.getText();
-			direccion = areaDireccion.getText();
-			telefono = areaTelefono.getText();
-			if (comprobarErrores()) {
-				Trabajador t = new Trabajador(id,dni,nombre,apellidos,direccion,telefono,puesto);
-				try {
-					TablaTrabajadores.modificarTrabajador(t);
-				} catch (BDException e) {
-					System.err.println(e.getMessage());
+		if (accion.getSource() == modificar) {
+			int filaSeleccionada = tabla.getSelectedRow();
+			if(filaSeleccionada != -1) {
+				
+				 if (tabla.isEditing()) { //comprueba si algun campo esta en modo edicion
+			            tabla.getCellEditor().stopCellEditing(); //para la edicion y guarda el nuevo valor
+			        }
+				String filaID = tabla.getValueAt(filaSeleccionada, 0).toString();
+				int idTrabajador = Integer.parseInt(filaID);
+				String dniTrabajador = tabla.getValueAt(filaSeleccionada, 1).toString();
+				String nombreTrabajador = tabla.getValueAt(filaSeleccionada, 2).toString();
+				String apellidoTrabajador = tabla.getValueAt(filaSeleccionada, 3).toString();
+				String direccionTrabajador = tabla.getValueAt(filaSeleccionada, 4).toString();
+				String telefonoTrabajador = tabla.getValueAt(filaSeleccionada, 5).toString();
+				String puestoTrabajador = tabla.getValueAt(filaSeleccionada, 6).toString();
+
+				Trabajador editTrabajador = new Trabajador(idTrabajador,dniTrabajador,nombreTrabajador,apellidoTrabajador,direccionTrabajador,telefonoTrabajador,puestoTrabajador);
+				int respuesta = JOptionPane.showConfirmDialog(null, "Desea modificar el trabajador?", "Modificar", JOptionPane.YES_NO_OPTION);
+				switch(respuesta) {
+				case JOptionPane.YES_OPTION:
+					try {
+						if (TablaTrabajadores.modificarTrabajador(editTrabajador)) {
+							JOptionPane.showMessageDialog(this, "El trabajador " + editTrabajador.getIdentificador() + " se ha modificado correctamente");
+							String[][] nuevosDatos = TablaTrabajadores.listarTrabajadores();
+							tabla.setModel(new javax.swing.table.DefaultTableModel(nuevosDatos, new String[] { "Identificador", "DNI", "Nombre", "Apellidos", "Direcci�n", "Tel�fono", "Puesto" }));
+						} else {
+							JOptionPane.showMessageDialog(null, "El trabajador no se ha modificado","Error",JOptionPane.ERROR_MESSAGE);
+						}
+					} catch (BDException e) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+								JOptionPane.ERROR_MESSAGE);					}
 				}
-				JOptionPane.showMessageDialog(null,"Trabajador introducido correctamente");
 			}
-		} else if (accion.getSource() == cancelar) {
+		} else if (accion.getSource() == cerrar) {
 			dispose();
 		}
-		
 	}
 	/**
 	 * M�todo que comprueba si no hay ning�n campo vac�o o si la longitud de los
@@ -243,11 +161,7 @@ public class ModificaDialog extends JDialog implements ItemListener, ActionListe
 	 * @return
 	 */
 	public boolean comprobarErrores() {
-		if (id < 1) {
-			JOptionPane.showMessageDialog(null, "El ID debe ser un n�mero entero positivo", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (dni.equals("") || dni.length() != 9) {
+		if (dni.equals("") || dni.length() != 9) {
 			JOptionPane.showMessageDialog(null, "El DNI debe tener longitud 9", "Error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		} else if (nombre.equals("")) {
@@ -273,6 +187,7 @@ public class ModificaDialog extends JDialog implements ItemListener, ActionListe
 		}
 		return true;
 	}
+}
 
 	//private static final long serialVersionUID = 1L;
 	//private final JPanel contentPanel = new JPanel();
@@ -295,4 +210,4 @@ public class ModificaDialog extends JDialog implements ItemListener, ActionListe
 	 */
 
 
-}
+

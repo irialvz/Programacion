@@ -28,27 +28,26 @@ public class VerDialog extends JDialog implements ActionListener {
 	JPanel panel;
 	JPanel panelBotones;
 	JLabel texto;
-	JTextArea areaResultado = new JTextArea(6,25);
+	JTextArea areaResultado = new JTextArea(6, 25);
 	Empresa empresa;
 
 	int id = 0;
-	
+
 	/**
 	 * Create the dialog.
 	 */
 	public VerDialog(Empresa empresa) {
 		this.empresa = empresa;
-		
+
 		setResizable(false);
 		// t�tulo del di�log
 		setTitle("Buscar Trabajador");
 		setSize(350, 300);
 		setLayout(new FlowLayout());
 		setLocationRelativeTo(null);
-		
+
 		texto = new JLabel("<html>Introduzca el ID del trabajador<br> que desea buscar<br><br></html>");
 		add(texto);
-		
 
 		panel = new JPanel();
 		panelBotones = new JPanel();
@@ -67,8 +66,7 @@ public class VerDialog extends JDialog implements ActionListener {
 		cancelar = new JButton("Cancelar");
 		cancelar.addActionListener(this);
 		panelBotones.add(cancelar);
-		
-		
+
 		areaResultado.setEditable(false);
 		add(areaResultado);
 		// Visible
@@ -76,35 +74,37 @@ public class VerDialog extends JDialog implements ActionListener {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	}
 
-
 	@Override
 	public void actionPerformed(ActionEvent accion) {
 		// TODO Auto-generated method stub
 		if (accion.getSource() == aceptar) {
 			try {
-			id = Integer.parseInt(areaIdentificador.getText());
-			if (comprobarErrores()) {
+				id = Integer.parseInt(areaIdentificador.getText());
+				if (comprobarErrores()) {
 					Trabajador t = TablaTrabajadores.obtenerTrabajador(id);
 					if (t != null) {
 						areaResultado.setText(t.toString());
 					} else {
 						JOptionPane.showMessageDialog(null, "El trabajador no existe");
 					}
-				} 
-			}catch (BDException e) {
-				System.err.println(e.getMessage());
+				}
+			} catch (BDException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			} catch (NumberFormatException nfe) {
+				JOptionPane.showMessageDialog(null, "Solo caracteres numericos", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		} else if (accion.getSource() == cancelar) {
 			dispose();
 		}
-		
+
 	}
+
 	public boolean comprobarErrores() {
 		if (id < 1) {
 			JOptionPane.showMessageDialog(null, "El ID debe ser un n�mero entero positivo", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			return false;
-		} 
+		}
 		return true;
 	}
 

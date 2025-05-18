@@ -5,10 +5,12 @@ package dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import dao.TablaTrabajadores;
+import excepciones.BDException;
 import ficheros.FicheroDatos;
 import modelo.Empresa;
 import modelo.Trabajador;
@@ -33,8 +36,8 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 	/**
 	 * Elementos del JFrame
 	 */
-	JLabel etiquetaIdentificador;
-	JTextField areaIdentificador;
+	//JLabel etiquetaIdentificador;
+	//JTextField areaIdentificador;
 	JLabel etiquetaDni;
 	JTextField areaDni;
 	JLabel etiquetaNombre;
@@ -52,7 +55,7 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 	/**
 	 * Variables a las que se pasar� el contenido de los JTextField y del combo box
 	 */
-	int id = 0;
+	//int id = 0;
 	String dni = "";
 	String nombre = "";
 	String apellidos = "";
@@ -60,7 +63,7 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 	String telefono = "";
 	String puesto = "";
 
-	JPanel pIdentificador;
+	//JPanel pIdentificador;
 	JPanel pDni;
 	JPanel pNombre;
 	JPanel pApellidos;
@@ -82,7 +85,7 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 		setLocationRelativeTo(null);
 
 		// una fila por JPanel
-		pIdentificador = new JPanel();
+		//pIdentificador = new JPanel();
 		pDni = new JPanel();
 		pNombre = new JPanel();
 		pApellidos = new JPanel();
@@ -91,12 +94,6 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 		pPuesto = new JPanel();
 		pBotones = new JPanel();
 
-		// Se crean los elementos y se añaden
-		etiquetaIdentificador = new JLabel("Identificador");
-		areaIdentificador = new JTextField(15);
-		// Se añaden al JPanel
-		pIdentificador.add(etiquetaIdentificador);
-		pIdentificador.add(areaIdentificador);
 
 		// Se crean los elementos y se añaden
 		etiquetaDni = new JLabel("DNI                 ");
@@ -139,15 +136,23 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 		// lista desplegable
 		comboPuesto = new JComboBox();
 		comboPuesto.addItem("Elija Puesto");
-		comboPuesto.addItem("Programador");
-		comboPuesto.addItem("Analista");
-		comboPuesto.addItem("Arquitecto");
-		comboPuesto.addItem("Jefe de Proyecto");
+		String[] puestosDisponibles;
+		try {
+			puestosDisponibles = TablaTrabajadores.obtenerPuestos();
+			for (String puesto : puestosDisponibles) {
+				comboPuesto.addItem(puesto);
+
+			}
+		} catch (BDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		comboPuesto.addItemListener(this);
 		pPuesto.add(comboPuesto);
 
 		// Añadir al JDialog los JPanel
-		add(pIdentificador);
+		//add(pIdentificador);
 		add(pDni);
 		add(pNombre);
 		add(pApellidos);
@@ -182,22 +187,23 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 		if (e.getSource() == aceptar) {
 			try {
 
-				id = Integer.parseInt(areaIdentificador.getText());
+				//id = Integer.parseInt(areaIdentificador.getText());
 				dni = areaDni.getText();
 				nombre = areaNombre.getText();
 				apellidos = areaApellidos.getText();
 				direccion = areaDireccion.getText();
 				telefono = areaTelefono.getText();
 				if (comprobarErrores()) {
-					Trabajador t = new Trabajador(id, dni, nombre, apellidos, direccion, telefono, puesto);
+					Trabajador t = new Trabajador(dni, nombre, apellidos, direccion, telefono, puesto);
 
 					if (TablaTrabajadores.agregarTrabajador(t)) {
 						JOptionPane.showMessageDialog(null, "Datos introducidos correctamente");
 					} else {
 						JOptionPane.showMessageDialog(null, "El ID del trabajador que quiere introducir ya existe",
 								"Error", JOptionPane.ERROR_MESSAGE);
+						dispose();
 					}
-				}
+				} 
 
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, "El ID debe ser un n�mero entero", "Error",
@@ -210,41 +216,68 @@ public class AltaDialog extends JDialog implements ActionListener, ItemListener 
 
 	}
 
+	   private static boolean validarDni(String documentoIdentidad) throws BDException {
+	        if (documentoIdentidad.length() != 9) {
+	            throw new BDException("El dni debe tener 9 caracteres");
+	        }
+	        if (documentoIdentidad.isEmpty()) {
+	            throw new BDException("El dni no puede estar vacio");
+	        }
+
+	        for (int i = 0; i < 7; i++) {
+	            char caracter = documentoIdentidad.charAt(i);
+	            if (caracter < '0' || caracter > '9') {
+	                throw new BDException("El dni debe contener contener numeros del 0-9");
+	            }
+	        }
+	        if (documentoIdentidad.charAt(8) < 'A' || documentoIdentidad.charAt(8) > 'Z') {
+	            throw new BDException("El dni debe contener una letra mayuscula");
+	        }
+	        return true;
+
+	    }
 	/**
 	 * M�todo que comprueba si no hay ning�n campo vac�o o si la longitud de los
 	 * campos es la correcta
 	 * 
 	 * @return
+	 * @throws BDException 
+	 * @throws HeadlessException 
 	 */
-	public boolean comprobarErrores() {
-		if (id < 1) {
-			JOptionPane.showMessageDialog(null, "El ID debe ser un n�mero entero positivo", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (dni.equals("") || dni.length() != 9) {
-			JOptionPane.showMessageDialog(null, "El DNI debe tener longitud 9", "Error", JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (nombre.equals("")) {
-			JOptionPane.showMessageDialog(null, "Debe introducir el nombre del trabajador", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (apellidos.equals("")) {
-			JOptionPane.showMessageDialog(null, "Debe introducir los apellidos del trabajador", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (direccion.equals("")) {
-			JOptionPane.showMessageDialog(null, "Debe introducir la direcci�n del trabajador", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (telefono.equals("") || telefono.length() != 9) {
-			JOptionPane.showMessageDialog(null, "El tel�fono debe tener longitud 9", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		} else if (puesto.equals("")) {
-			JOptionPane.showMessageDialog(null, "Debe introducir el puesto del trabajador", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
+	public boolean comprobarErrores()  {
+		try {
+			if (!validarDni(dni)) {
+					return false;
+				} else if (nombre.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Debe introducir el nombre del trabajador", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return false;
+				} else if (apellidos.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Debe introducir los apellidos del trabajador", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return false;
+				} else if (direccion.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Debe introducir la direcci�n del trabajador", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return false;
+				} else if (telefono.isEmpty() || telefono.length() != 9) {
+					JOptionPane.showMessageDialog(null, "El tel�fono debe tener longitud 9", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return false;
+				} else if (puesto.isEmpty() || puesto.equalsIgnoreCase("Elija Puesto")) {
+					JOptionPane.showMessageDialog(null, "Debe introducir el puesto del trabajador", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return false;
+				}
+			} catch (HeadlessException e) {
+				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return false;
+			} catch (BDException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 		return true;
 	}
 
